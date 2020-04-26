@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
+
+import CustomSnackBar from '../customSnackbar/CustomSnackbar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
@@ -23,6 +25,9 @@ function CreateShopForm() {
   const [phone, setPhone] = useState<string>('');
   const [address, setAddress] = useState<string>('');
 
+  const [snackBarStatus, setSnackBarStatus] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
   const handleShopNameChange = (e: any) => {
     if (e.target.value)
       setShopName(e.target.value);
@@ -39,8 +44,11 @@ function CreateShopForm() {
   }
 
   const handleCreateShop = () => {
-    if (shopName && phone && address)
+    if (shopName && phone && address) {
       createShop(shopName, phone, address);
+      setSnackBarStatus('');
+      setMessage('');
+    }
   }
 
   const createShop = async (shopName: string, phone: string, address: string) => {
@@ -49,9 +57,20 @@ function CreateShopForm() {
         shopName: shopName,
         phone: phone,
         address: address,
+      },
+      {
+        headers: {
+          'Content-type': 'application/json'
+        }
       }
     );
-    console.log("response = ", response);
+    if (response && response.status === 201) {
+      setSnackBarStatus('success');
+      setMessage('create shop success');
+    } else {
+      setSnackBarStatus('error');
+      setMessage('create shop error');
+    }
   }
 
   return (
@@ -66,6 +85,7 @@ function CreateShopForm() {
           <TextField className="w-100 my-2" label="Address" variant="outlined" onChange={(e) => handleAddressChange(e)} />
           <Button className="w-100 my-2" variant="contained" size="large" color="primary" onClick={handleCreateShop}>Create shop</Button>
         </CardContent>
+        <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
       </Card>
     </div>
   );
