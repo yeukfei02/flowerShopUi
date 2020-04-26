@@ -1,15 +1,54 @@
 import React from 'react';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { Switch, Route } from 'react-router-dom';
 
-import MainPage from './mainPage/MainPage';
+import Search from './search/Search';
+import CreateShop from './createShop/CreateShop';
+import CreateFlower from './createFlower/CreateFlower';
+
+// use default theme
+// const theme = createMuiTheme();
+
+// create own theme
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#cce6ff',
+    },
+    secondary: {
+      main: '#d8d2ee',
+    },
+    background: {
+      default: '#FFFFFF',
+    },
+  },
+  typography: {
+    fontFamily: 'Righteous, sans-serif',
+  },
+});
+
 
 function App() {
   return (
-    <Switch>
-      <Route exact path="/">
-        <MainPage />
-      </Route>
-    </Switch>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+
+      <Switch>
+        <Route exact path="/">
+          <Search />
+        </Route>
+        <Route exact path="/search">
+          <Search />
+        </Route>
+        <Route exact path="/create-shop">
+          <CreateShop />
+        </Route>
+        <Route exact path="/create-flower">
+          <CreateFlower />
+        </Route>
+      </Switch>
+    </MuiThemeProvider>
   );
 }
 
