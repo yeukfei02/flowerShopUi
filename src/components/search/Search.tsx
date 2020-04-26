@@ -5,11 +5,11 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Pagination from '@material-ui/lab/Pagination';
 import axios from 'axios';
 
 import CustomAppBar from '../customAppBar/CustomAppBar';
 import DisplayResult from '../displayResult/DisplayResult';
-import CustomPagination from '../customPagination/CustomPagination';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
@@ -29,15 +29,30 @@ function Search() {
   const classes = useStyles();
 
   const [searchValue, setSearchValue] = useState<string>('');
+
+  const [shopName, setShopName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+
+  const [flowerName, setFlowerName] = useState<string>('');
+  const [color, setColor] = useState<string>('');
+  const [flowerType, setFlowerType] = useState<string>('');
+  const [price, setPrice] = useState<number>(0);
+  const [occasion, setOccasion] = useState<string>('');
+
   const [resultList, setResultList] = useState<any[]>([]);
+  const [pageResultList, setPageResultList] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
     if (searchValue === 'shop') {
       getAllShop();
+      getAllShopByFilter(page);
     } else if (searchValue === 'flower') {
       getAllFlower();
+      getAllFlowerByFilter(page);
     }
-  }, [searchValue]);
+  }, [searchValue, page]);
 
   const getAllShop = async () => {
     const response = await axios.get(`${ROOT_URL}/shop`);
@@ -48,6 +63,52 @@ function Search() {
         });
         if (shopResultList)
           setResultList(shopResultList);
+      }
+    }
+  }
+
+  const getAllShopByFilter = async (page: number) => {
+    setPageResultList([]);
+
+    let data = {};
+    if (shopName) {
+      let obj = {
+        shopName: shopName
+      };
+      data = Object.assign(data, obj);
+    }
+    if (phone) {
+      let obj = {
+        phone: phone
+      };
+      data = Object.assign(data, obj);
+    }
+    if (address) {
+      let obj = {
+        address: address
+      };
+      data = Object.assign(data, obj);
+    }
+    if (page) {
+      let obj = {
+        page: page
+      };
+      data = Object.assign(data, obj);
+    }
+
+    const response = await axios.get(`${ROOT_URL}/shop`,
+      {
+        params: data
+      }
+    );
+    if (response && response.status === 200) {
+      if (response.data) {
+        const shopResultList = response.data.shops.map((item: any, i: number) => {
+          return item;
+        });
+        if (shopResultList) {
+          setPageResultList(shopResultList);
+        }
       }
     }
   }
@@ -65,38 +126,128 @@ function Search() {
     }
   }
 
+  const getAllFlowerByFilter = async (page: number) => {
+    setPageResultList([]);
+
+    let data = {};
+    if (flowerName) {
+      let obj = {
+        flowerName: flowerName
+      };
+      data = Object.assign(data, obj);
+    }
+    if (color) {
+      let obj = {
+        color: color
+      };
+      data = Object.assign(data, obj);
+    }
+    if (flowerType) {
+      let obj = {
+        flowerType: flowerType
+      };
+      data = Object.assign(data, obj);
+    }
+    if (price) {
+      let obj = {
+        price: price
+      };
+      data = Object.assign(data, obj);
+    }
+    if (occasion) {
+      let obj = {
+        occasion: occasion
+      };
+      data = Object.assign(data, obj);
+    }
+    if (page) {
+      let obj = {
+        page: page
+      };
+      data = Object.assign(data, obj);
+    }
+
+    const response = await axios.get(`${ROOT_URL}/flower`,
+      {
+        params: data
+      }
+    );
+    if (response && response.status === 200) {
+      if (response.data) {
+        const flowerResultList = response.data.flowers.map((item: any, i: number) => {
+          return item;
+        });
+        if (flowerResultList) {
+          setPageResultList(flowerResultList);
+        }
+      }
+    }
+  }
+
   const handleSearchShop = () => {
     setSearchValue('shop');
-    setResultList([]);
+
+    clearInputData();
   }
 
   const handleSearchFlower = () => {
     setSearchValue('flower');
-    setResultList([]);
+
+    clearInputData();
+  }
+
+  const clearInputData = () => {
+    setShopName('');
+    setPhone('');
+    setAddress('');
+
+    setFlowerName('');
+    setColor('');
+    setFlowerType('');
+    setPrice(0);
+    setOccasion('');
   }
 
   const handleShopNameChange = (e: any) => {
-
+    setShopName(e.target.value);
   }
 
   const handlePhoneChange = (e: any) => {
-
+    setPhone(e.target.value);
   }
 
   const handleAddressChange = (e: any) => {
-
+    setAddress(e.target.value);
   }
 
   const handleFilterShop = () => {
-
+    setPage(1);
+    getAllShopByFilter(1);
   }
 
   const handleFlowerNameChange = (e: any) => {
+    setFlowerName(e.target.value);
+  }
 
+  const handleColorChange = (e: any) => {
+    setColor(e.target.value);
+  }
+
+  const handleFlowerTypeChange = (e: any) => {
+    setFlowerType(e.target.value);
+  }
+
+  const handlePriceChange = (e: any) => {
+    setPrice(parseFloat(e.target.value));
+  }
+
+  const handleOccasionChange = (e: any) => {
+    setOccasion(e.target.value);
   }
 
   const handleFilterFlower = () => {
-
+    setPage(1);
+    getAllFlowerByFilter(1);
   }
 
   const renderSearchDiv = () => {
@@ -122,6 +273,10 @@ function Search() {
       searchDiv = (
         <div className="p-3">
           <TextField className="w-100 my-2" label="Flower name" variant="outlined" onChange={(e) => handleFlowerNameChange(e)} />
+          <TextField className="w-100 my-2" label="Color" variant="outlined" onChange={(e) => handleColorChange(e)} />
+          <TextField className="w-100 my-2" label="Flower type" variant="outlined" onChange={(e) => handleFlowerTypeChange(e)} />
+          <TextField className="w-100 my-2" type="number" label="Price" variant="outlined" onChange={(e) => handlePriceChange(e)} />
+          <TextField className="w-100 my-2" label="Occasion" variant="outlined" onChange={(e) => handleOccasionChange(e)} />
           <Button
             className="w-100 my-2"
             variant="contained"
@@ -140,16 +295,24 @@ function Search() {
   const renderDisplayResult = () => {
     let displayResult = null;
 
-    if (searchValue && resultList) {
+    if (searchValue && pageResultList) {
       displayResult = (
         <div>
-          <DisplayResult searchValue={searchValue} resultList={resultList} />
-          <CustomPagination totalPage={Math.round(resultList.length / 10)} />
+          <DisplayResult searchValue={searchValue} resultList={pageResultList} />
+          <div className={`${classes.root} d-flex justify-content-center mt-3 mb-5`}>
+            <Pagination count={Math.round(resultList.length / 10)} page={page} color="secondary" showFirstButton showLastButton onChange={handlePageChange} />
+          </div>
         </div>
       );
     }
 
     return displayResult;
+  }
+
+  const handlePageChange = (event: object, page: number) => {
+    if (page) {
+      setPage(page);
+    }
   }
 
   return (

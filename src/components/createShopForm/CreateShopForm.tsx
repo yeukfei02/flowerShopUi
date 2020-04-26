@@ -29,18 +29,15 @@ function CreateShopForm() {
   const [message, setMessage] = useState<string>('');
 
   const handleShopNameChange = (e: any) => {
-    if (e.target.value)
-      setShopName(e.target.value);
+    setShopName(e.target.value);
   }
 
   const handlePhoneChange = (e: any) => {
-    if (e.target.value)
-      setPhone(e.target.value);
+    setPhone(e.target.value);
   }
 
   const handleAddressChange = (e: any) => {
-    if (e.target.value)
-      setAddress(e.target.value);
+    setAddress(e.target.value);
   }
 
   const handleCreateShop = () => {

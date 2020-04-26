@@ -65,28 +65,23 @@ function CreateFlowerForm() {
   }
 
   const handleFlowerNameChange = (e: any) => {
-    if (e.target.value)
-      setFlowerName(e.target.value);
+    setFlowerName(e.target.value);
   }
 
   const handleColorChange = (e: any) => {
-    if (e.target.value)
-      setColor(e.target.value);
+    setColor(e.target.value);
   }
 
   const handleFlowerTypeChange = (e: any) => {
-    if (e.target.value)
-      setFlowerType(e.target.value);
+    setFlowerType(e.target.value);
   }
 
   const handlePriceChange = (e: any) => {
-    if (e.target.value)
-      setPrice(parseFloat(e.target.value));
+    setPrice(parseFloat(e.target.value));
   }
 
   const handleOccasionChange = (e: any) => {
-    if (e.target.value)
-      setOccasion(e.target.value);
+    setOccasion(e.target.value);
   }
 
   const handleShopChange = (selectedShop: any) => {
