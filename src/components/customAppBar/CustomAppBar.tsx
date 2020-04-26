@@ -28,12 +28,8 @@ function CustomAppBar() {
     history.push(`/search`);
   }
 
-  const handleCreateShopClick = () => {
-    history.push(`/create-shop`);
-  }
-
-  const handleCreateFlowerClick = () => {
-    history.push(`/create-flower`);
+  const handleCreateClick = () => {
+    history.push(`/create`);
   }
 
   return (
@@ -44,8 +40,7 @@ function CustomAppBar() {
             Flower shop
           </Typography>
           <Button color="inherit" onClick={handleSearchClick}>Search</Button>
-          <Button color="inherit" onClick={handleCreateShopClick}>Create shop</Button>
-          <Button color="inherit" onClick={handleCreateFlowerClick}>Create flower</Button>
+          <Button color="inherit" onClick={handleCreateClick}>Create</Button>
         </Toolbar>
       </AppBar>
     </div>

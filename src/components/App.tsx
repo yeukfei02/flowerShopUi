@@ -4,8 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Switch, Route } from 'react-router-dom';
 
 import Search from './search/Search';
-import CreateShop from './createShop/CreateShop';
-import CreateFlower from './createFlower/CreateFlower';
+import Create from './create/Create';
 
 // use default theme
 // const theme = createMuiTheme();
@@ -41,11 +40,8 @@ function App() {
         <Route exact path="/search">
           <Search />
         </Route>
-        <Route exact path="/create-shop">
-          <CreateShop />
-        </Route>
-        <Route exact path="/create-flower">
-          <CreateFlower />
+        <Route exact path="/create">
+          <Create />
         </Route>
       </Switch>
     </MuiThemeProvider>
