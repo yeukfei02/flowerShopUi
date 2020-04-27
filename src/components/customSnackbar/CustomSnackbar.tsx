@@ -35,7 +35,7 @@ function CustomSnackbar(props: any) {
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
   const renderSnackBar = () => {
     let snackBar = null;
@@ -59,13 +59,9 @@ function CustomSnackbar(props: any) {
     }
 
     return snackBar;
-  }
+  };
 
-  return (
-    <div className={classes.root}>
-      {renderSnackBar()}
-    </div>
-  );
+  return <div className={classes.root}>{renderSnackBar()}</div>;
 }
 
 export default CustomSnackbar;

@@ -16,17 +16,37 @@ const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 const useStyles = makeStyles({
   root: {
     width: 600,
-    margin: 20
+    margin: 20,
   },
 });
 
 const selectStyles = {
   container: (base: any, state: any) => ({
     ...base,
-    opacity: state.isDisabled ? ".5" : "1",
-    backgroundColor: "transparent",
-    zIndex: "999"
-  })
+    opacity: state.isDisabled ? '.5' : '1',
+    backgroundColor: 'transparent',
+    zIndex: '999',
+  }),
+};
+
+const getShopList = async () => {
+  let result = null;
+
+  const response = await axios.get(`${ROOT_URL}/shop`);
+  if (response && response.status === 200) {
+    if (response.data) {
+      const shopList = response.data.shops.map((item: any, i: number) => {
+        const obj = {
+          value: item.shopId,
+          label: item.shopName,
+        };
+        return obj;
+      });
+      result = shopList;
+    }
+  }
+
+  return result;
 };
 
 function CreateFlowerForm() {
@@ -46,37 +66,17 @@ function CreateFlowerForm() {
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
-    getShopList();
+    getShopList()
+      .then((result: any) => {
+        setShopList(result);
+      })
+      .catch((e: any) => {
+        console.log('error = ', e.message);
+      });
   }, []);
 
-  const getShopList = async () => {
-    const response = await axios.get(`${ROOT_URL}/shop`);
-    if (response && response.status === 200) {
-      if (response.data) {
-        const shopList = response.data.shops.map((item: any, i: number) => {
-          let obj = {
-            value: item.shopId,
-            label: item.shopName
-          };
-          return obj;
-        });
-        setShopList(shopList);
-      }
-    }
-  }
-
-  const handleFilesUpload = (files: any[]) => {
-    if (files && files.length === 1) {
-      getBase64(files[0], (imageBase64String: string) => {
-        if (imageBase64String) {
-          setImage(imageBase64String);
-        }
-      })
-    }
-  }
-
   const getBase64 = (file: any, cb: any) => {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       cb(reader.result);
@@ -84,33 +84,78 @@ function CreateFlowerForm() {
     reader.onerror = (error) => {
       console.log('error = ', error);
     };
-  }
+  };
+
+  const handleFilesUpload = (files: any[]) => {
+    if (files && files.length === 1) {
+      getBase64(files[0], (imageBase64String: string) => {
+        if (imageBase64String) {
+          setImage(imageBase64String);
+        }
+      });
+    }
+  };
 
   const handleFlowerNameChange = (e: any) => {
     setFlowerName(e.target.value);
-  }
+  };
 
   const handleColorChange = (e: any) => {
     setColor(e.target.value);
-  }
+  };
 
   const handleFlowerTypeChange = (e: any) => {
     setFlowerType(e.target.value);
-  }
+  };
 
   const handlePriceChange = (e: any) => {
     setPrice(parseFloat(e.target.value));
-  }
+  };
 
   const handleOccasionChange = (e: any) => {
     setOccasion(e.target.value);
-  }
+  };
 
   const handleShopChange = (selectedShop: any) => {
     if (selectedShop) {
       setShop(selectedShop);
     }
-  }
+  };
+
+  const createFlower = async (
+    image: string,
+    flowerName: string,
+    color: string,
+    flowerType: string,
+    price: number,
+    occasion: string,
+    shop: any,
+  ) => {
+    const response = await axios.post(
+      `${ROOT_URL}/flower/create-flower`,
+      {
+        image: image,
+        flowerName: flowerName,
+        color: color,
+        flowerType: flowerType,
+        price: price,
+        occasion: occasion,
+        shopId: shop.value,
+      },
+      {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      },
+    );
+    if (response && response.status === 201) {
+      setSnackBarStatus('success');
+      setMessage('create flower success');
+    } else {
+      setSnackBarStatus('error');
+      setMessage('create flower error');
+    }
+  };
 
   const handleCreateFlower = () => {
     if (image && flowerName && color && flowerType && price && occasion && shop) {
@@ -121,33 +166,7 @@ function CreateFlowerForm() {
       setSnackBarStatus('error');
       setMessage('please enter all fields');
     }
-  }
-
-  const createFlower = async (image: string, flowerName: string, color: string, flowerType: string, price: number, occasion: string, shop: any) => {
-    const response = await axios.post(`${ROOT_URL}/flower/create-flower`,
-      {
-        image: image,
-        flowerName: flowerName,
-        color: color,
-        flowerType: flowerType,
-        price: price,
-        occasion: occasion,
-        shopId: shop.value
-      },
-      {
-        headers: {
-          'Content-type': 'application/json'
-        }
-      }
-    );
-    if (response && response.status === 201) {
-      setSnackBarStatus('success');
-      setMessage('create flower success');
-    } else {
-      setSnackBarStatus('error');
-      setMessage('create flower error');
-    }
-  }
+  };
 
   return (
     <div className="d-flex justify-content-center">
@@ -159,23 +178,44 @@ function CreateFlowerForm() {
           <div className="mt-3 mb-2">
             <DropzoneArea
               acceptedFiles={['image/*']}
-              dropzoneText={"Drag and drop an image here or click"}
+              dropzoneText={'Drag and drop an image here or click'}
               filesLimit={1}
               maxFileSize={500000}
               onChange={handleFilesUpload}
               alertSnackbarProps={{
                 anchorOrigin: {
                   horizontal: 'center',
-                  vertical: 'bottom'
-                }
+                  vertical: 'bottom',
+                },
               }}
             />
           </div>
-          <TextField className="w-100 my-2" label="Flower name" variant="outlined" onChange={(e) => handleFlowerNameChange(e)} />
+          <TextField
+            className="w-100 my-2"
+            label="Flower name"
+            variant="outlined"
+            onChange={(e) => handleFlowerNameChange(e)}
+          />
           <TextField className="w-100 my-2" label="Color" variant="outlined" onChange={(e) => handleColorChange(e)} />
-          <TextField className="w-100 my-2" label="Flower type" variant="outlined" onChange={(e) => handleFlowerTypeChange(e)} />
-          <TextField className="w-100 my-2" type="number" label="Price" variant="outlined" onChange={(e) => handlePriceChange(e)} />
-          <TextField className="w-100 my-2" label="Occasion" variant="outlined" onChange={(e) => handleOccasionChange(e)} />
+          <TextField
+            className="w-100 my-2"
+            label="Flower type"
+            variant="outlined"
+            onChange={(e) => handleFlowerTypeChange(e)}
+          />
+          <TextField
+            className="w-100 my-2"
+            type="number"
+            label="Price"
+            variant="outlined"
+            onChange={(e) => handlePriceChange(e)}
+          />
+          <TextField
+            className="w-100 my-2"
+            label="Occasion"
+            variant="outlined"
+            onChange={(e) => handleOccasionChange(e)}
+          />
           <Select
             className="w-100 my-2"
             styles={selectStyles}
@@ -185,7 +225,9 @@ function CreateFlowerForm() {
             options={shopList}
             isClearable={true}
           />
-          <Button className="w-100 my-2" variant="contained" size="large" color="primary" onClick={handleCreateFlower}>Create flower</Button>
+          <Button className="w-100 my-2" variant="contained" size="large" color="primary" onClick={handleCreateFlower}>
+            Create flower
+          </Button>
         </CardContent>
         <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
       </Card>

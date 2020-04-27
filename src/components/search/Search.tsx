@@ -20,10 +20,137 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       width: 600,
-      margin: 20
+      margin: 20,
     },
   }),
 );
+
+const getAllShop = async () => {
+  let result = null;
+
+  const response = await axios.get(`${ROOT_URL}/shop`);
+  if (response && response.status === 200) {
+    if (response.data) {
+      result = response.data.shops;
+    }
+  }
+
+  return result;
+};
+
+const getAllShopByFilter = async (shopName: string, phone: string, address: string, page: number) => {
+  let data = {};
+  if (shopName) {
+    const obj = {
+      shopName: shopName,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (phone) {
+    const obj = {
+      phone: phone,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (address) {
+    const obj = {
+      address: address,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (page) {
+    const obj = {
+      page: page,
+    };
+    data = Object.assign(data, obj);
+  }
+
+  let result = null;
+
+  const response = await axios.get(`${ROOT_URL}/shop`, {
+    params: data,
+  });
+  if (response && response.status === 200) {
+    if (response.data) {
+      result = response.data.shops;
+    }
+  }
+
+  return result;
+};
+
+const getAllFlower = async () => {
+  let result = null;
+
+  const response = await axios.get(`${ROOT_URL}/flower`);
+  if (response && response.status === 200) {
+    if (response.data) {
+      result = response.data.flowers;
+    }
+  }
+
+  return result;
+};
+
+const getAllFlowerByFilter = async (
+  flowerName: string,
+  color: string,
+  flowerType: string,
+  price: number,
+  occasion: string,
+  page: number,
+) => {
+  let data = {};
+  if (flowerName) {
+    const obj = {
+      flowerName: flowerName,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (color) {
+    const obj = {
+      color: color,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (flowerType) {
+    const obj = {
+      flowerType: flowerType,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (price) {
+    const obj = {
+      price: price,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (occasion) {
+    const obj = {
+      occasion: occasion,
+    };
+    data = Object.assign(data, obj);
+  }
+  if (page) {
+    const obj = {
+      page: page,
+    };
+    data = Object.assign(data, obj);
+  }
+
+  let result = null;
+
+  const response = await axios.get(`${ROOT_URL}/flower`, {
+    params: data,
+  });
+  if (response && response.status === 200) {
+    if (response.data) {
+      result = response.data.flowers;
+    }
+  }
+
+  return result;
+};
 
 function Search() {
   const classes = useStyles();
@@ -50,193 +177,103 @@ function Search() {
 
   const fetchData = (searchValue: string, page: number) => {
     if (searchValue === 'shop') {
-      getAllShop();
-      getAllShopByFilter(page);
+      getAllShop()
+        .then((result: any) => {
+          setResultList(result);
+        })
+        .catch((e: any) => {
+          console.log('error = ', e.message);
+        });
+
+      getAllShopByFilter(shopName, phone, address, page)
+        .then((result: any) => {
+          setPageResultList(result);
+        })
+        .catch((e: any) => {
+          console.log('error = ', e.message);
+        });
     } else if (searchValue === 'flower') {
-      getAllFlower();
-      getAllFlowerByFilter(page);
-    }
-  }
-
-  const getAllShop = async () => {
-    const response = await axios.get(`${ROOT_URL}/shop`);
-    if (response && response.status === 200) {
-      if (response.data) {
-        const shopResultList = response.data.shops.map((item: any, i: number) => {
-          return item;
+      getAllFlower()
+        .then((result: any) => {
+          setResultList(result);
+        })
+        .catch((e: any) => {
+          console.log('error = ', e.message);
         });
-        if (shopResultList)
-          setResultList(shopResultList);
-      }
-    }
-  }
 
-  const getAllShopByFilter = async (page: number) => {
-    setPageResultList([]);
-
-    let data = {};
-    if (shopName) {
-      let obj = {
-        shopName: shopName
-      };
-      data = Object.assign(data, obj);
-    }
-    if (phone) {
-      let obj = {
-        phone: phone
-      };
-      data = Object.assign(data, obj);
-    }
-    if (address) {
-      let obj = {
-        address: address
-      };
-      data = Object.assign(data, obj);
-    }
-    if (page) {
-      let obj = {
-        page: page
-      };
-      data = Object.assign(data, obj);
-    }
-
-    const response = await axios.get(`${ROOT_URL}/shop`,
-      {
-        params: data
-      }
-    );
-    if (response && response.status === 200) {
-      if (response.data) {
-        const shopResultList = response.data.shops.map((item: any, i: number) => {
-          return item;
+      getAllFlowerByFilter(flowerName, color, flowerType, price, occasion, page)
+        .then((result: any) => {
+          setPageResultList(result);
+        })
+        .catch((e: any) => {
+          console.log('error = ', e.message);
         });
-        if (shopResultList) {
-          setPageResultList(shopResultList);
-        }
-      }
     }
-  }
-
-  const getAllFlower = async () => {
-    const response = await axios.get(`${ROOT_URL}/flower`);
-    if (response && response.status === 200) {
-      if (response.data) {
-        const flowerResultList = response.data.flowers.map((item: any, i: number) => {
-          return item;
-        });
-        if (flowerResultList)
-          setResultList(flowerResultList);
-      }
-    }
-  }
-
-  const getAllFlowerByFilter = async (page: number) => {
-    setPageResultList([]);
-
-    let data = {};
-    if (flowerName) {
-      let obj = {
-        flowerName: flowerName
-      };
-      data = Object.assign(data, obj);
-    }
-    if (color) {
-      let obj = {
-        color: color
-      };
-      data = Object.assign(data, obj);
-    }
-    if (flowerType) {
-      let obj = {
-        flowerType: flowerType
-      };
-      data = Object.assign(data, obj);
-    }
-    if (price) {
-      let obj = {
-        price: price
-      };
-      data = Object.assign(data, obj);
-    }
-    if (occasion) {
-      let obj = {
-        occasion: occasion
-      };
-      data = Object.assign(data, obj);
-    }
-    if (page) {
-      let obj = {
-        page: page
-      };
-      data = Object.assign(data, obj);
-    }
-
-    const response = await axios.get(`${ROOT_URL}/flower`,
-      {
-        params: data
-      }
-    );
-    if (response && response.status === 200) {
-      if (response.data) {
-        const flowerResultList = response.data.flowers.map((item: any, i: number) => {
-          return item;
-        });
-        if (flowerResultList) {
-          setPageResultList(flowerResultList);
-        }
-      }
-    }
-  }
+  };
 
   const handleSearchShop = () => {
     setSearchValue('shop');
-  }
+  };
 
   const handleSearchFlower = () => {
     setSearchValue('flower');
-  }
+  };
 
   const handleShopNameChange = (e: any) => {
     setShopName(e.target.value);
-  }
+  };
 
   const handlePhoneChange = (e: any) => {
     setPhone(e.target.value);
-  }
+  };
 
   const handleAddressChange = (e: any) => {
     setAddress(e.target.value);
-  }
+  };
 
   const handleFilterShop = () => {
     setPage(1);
-    getAllShopByFilter(1);
-  }
+
+    getAllShopByFilter(shopName, phone, address, 1)
+      .then((result: any) => {
+        setPageResultList(result);
+      })
+      .catch((e: any) => {
+        console.log('error = ', e.message);
+      });
+  };
 
   const handleFlowerNameChange = (e: any) => {
     setFlowerName(e.target.value);
-  }
+  };
 
   const handleColorChange = (e: any) => {
     setColor(e.target.value);
-  }
+  };
 
   const handleFlowerTypeChange = (e: any) => {
     setFlowerType(e.target.value);
-  }
+  };
 
   const handlePriceChange = (e: any) => {
     setPrice(parseFloat(e.target.value));
-  }
+  };
 
   const handleOccasionChange = (e: any) => {
     setOccasion(e.target.value);
-  }
+  };
 
   const handleFilterFlower = () => {
     setPage(1);
-    getAllFlowerByFilter(1);
-  }
+
+    getAllFlowerByFilter(flowerName, color, flowerType, price, occasion, 1)
+      .then((result: any) => {
+        setPageResultList(result);
+      })
+      .catch((e: any) => {
+        console.log('error = ', e.message);
+      });
+  };
 
   const renderSearchDiv = () => {
     let searchDiv = null;
@@ -244,15 +281,20 @@ function Search() {
     if (searchValue === 'shop') {
       searchDiv = (
         <div className="p-3">
-          <TextField className="w-100 my-2" label="Shop name" variant="outlined" onChange={(e) => handleShopNameChange(e)} />
-          <TextField className="w-100 my-2" label="Phone" variant="outlined" onChange={(e) => handlePhoneChange(e)} />
-          <TextField className="w-100 my-2" label="Address" variant="outlined" onChange={(e) => handleAddressChange(e)} />
-          <Button
+          <TextField
             className="w-100 my-2"
-            variant="contained"
-            size="large"
-            color="secondary"
-            onClick={handleFilterShop}>
+            label="Shop name"
+            variant="outlined"
+            onChange={(e) => handleShopNameChange(e)}
+          />
+          <TextField className="w-100 my-2" label="Phone" variant="outlined" onChange={(e) => handlePhoneChange(e)} />
+          <TextField
+            className="w-100 my-2"
+            label="Address"
+            variant="outlined"
+            onChange={(e) => handleAddressChange(e)}
+          />
+          <Button className="w-100 my-2" variant="contained" size="large" color="secondary" onClick={handleFilterShop}>
             Filter shop
           </Button>
         </div>
@@ -260,17 +302,39 @@ function Search() {
     } else if (searchValue === 'flower') {
       searchDiv = (
         <div className="p-3">
-          <TextField className="w-100 my-2" label="Flower name" variant="outlined" onChange={(e) => handleFlowerNameChange(e)} />
+          <TextField
+            className="w-100 my-2"
+            label="Flower name"
+            variant="outlined"
+            onChange={(e) => handleFlowerNameChange(e)}
+          />
           <TextField className="w-100 my-2" label="Color" variant="outlined" onChange={(e) => handleColorChange(e)} />
-          <TextField className="w-100 my-2" label="Flower type" variant="outlined" onChange={(e) => handleFlowerTypeChange(e)} />
-          <TextField className="w-100 my-2" type="number" label="Price" variant="outlined" onChange={(e) => handlePriceChange(e)} />
-          <TextField className="w-100 my-2" label="Occasion" variant="outlined" onChange={(e) => handleOccasionChange(e)} />
+          <TextField
+            className="w-100 my-2"
+            label="Flower type"
+            variant="outlined"
+            onChange={(e) => handleFlowerTypeChange(e)}
+          />
+          <TextField
+            className="w-100 my-2"
+            type="number"
+            label="Price"
+            variant="outlined"
+            onChange={(e) => handlePriceChange(e)}
+          />
+          <TextField
+            className="w-100 my-2"
+            label="Occasion"
+            variant="outlined"
+            onChange={(e) => handleOccasionChange(e)}
+          />
           <Button
             className="w-100 my-2"
             variant="contained"
             size="large"
             color="secondary"
-            onClick={handleFilterFlower}>
+            onClick={handleFilterFlower}
+          >
             Filter flower
           </Button>
         </div>
@@ -278,7 +342,13 @@ function Search() {
     }
 
     return searchDiv;
-  }
+  };
+
+  const handlePageChange = (event: object, page: number) => {
+    if (page) {
+      setPage(page);
+    }
+  };
 
   const renderDisplayResult = () => {
     let displayResult = null;
@@ -286,22 +356,27 @@ function Search() {
     if (searchValue && pageResultList) {
       displayResult = (
         <div>
-          <DisplayResult searchValue={searchValue} resultList={pageResultList} fetchData={() => fetchData(searchValue, page)} />
+          <DisplayResult
+            searchValue={searchValue}
+            resultList={pageResultList}
+            fetchData={() => fetchData(searchValue, page)}
+          />
           <div className={`${classes.root} d-flex justify-content-center mt-3 mb-5`}>
-            <Pagination count={Math.round(resultList.length / 10)} page={page} color="secondary" showFirstButton showLastButton onChange={handlePageChange} />
+            <Pagination
+              count={Math.round(resultList.length / 10)}
+              page={page}
+              color="secondary"
+              showFirstButton
+              showLastButton
+              onChange={handlePageChange}
+            />
           </div>
         </div>
       );
     }
 
     return displayResult;
-  }
-
-  const handlePageChange = (event: object, page: number) => {
-    if (page) {
-      setPage(page);
-    }
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -311,22 +386,12 @@ function Search() {
           <CardContent>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <Button
-                  className="w-100"
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  onClick={handleSearchShop}>
+                <Button className="w-100" variant="contained" size="large" color="primary" onClick={handleSearchShop}>
                   Search shop
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Button
-                  className="w-100"
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  onClick={handleSearchFlower}>
+                <Button className="w-100" variant="contained" size="large" color="primary" onClick={handleSearchFlower}>
                   Search flower
                 </Button>
               </Grid>
@@ -337,7 +402,7 @@ function Search() {
       </div>
       {renderDisplayResult()}
     </div>
-  )
+  );
 }
 
 export default Search;

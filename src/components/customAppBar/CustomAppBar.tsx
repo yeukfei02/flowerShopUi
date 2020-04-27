@@ -26,11 +26,11 @@ function CustomAppBar() {
 
   const handleSearchClick = () => {
     history.push(`/search`);
-  }
+  };
 
   const handleCreateClick = () => {
     history.push(`/create`);
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -39,8 +39,12 @@ function CustomAppBar() {
           <Typography variant="h6" className={classes.title}>
             Flower shop
           </Typography>
-          <Button color="inherit" onClick={handleSearchClick}>Search</Button>
-          <Button color="inherit" onClick={handleCreateClick}>Create</Button>
+          <Button color="inherit" onClick={handleSearchClick}>
+            Search
+          </Button>
+          <Button color="inherit" onClick={handleCreateClick}>
+            Create
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      margin: 20
+      margin: 20,
     },
     paper: {
       padding: theme.spacing(2),
@@ -48,11 +48,11 @@ function DisplayResult(props: any) {
         }, 1000);
       }
     } catch (e) {
-      console.log("error = ", e.message);
+      console.log('error = ', e.message);
       setSnackBarStatus('error');
       setMessage(`delete shop by id error, please delete flower first`);
     }
-  }
+  };
 
   const deleteFlowerById = async (id: string) => {
     try {
@@ -65,31 +65,31 @@ function DisplayResult(props: any) {
         }, 1000);
       }
     } catch (e) {
-      console.log("error = ", e.message);
+      console.log('error = ', e.message);
       setSnackBarStatus('error');
       setMessage(`delete flower by id error`);
     }
-  }
+  };
 
   const handleShopDeleteById = (shopId: string) => {
     if (shopId) {
       deleteShopById(shopId);
     }
-  }
+  };
 
   const handleFlowerDeleteById = (flowerId: string) => {
     if (flowerId) {
       deleteFlowerById(flowerId);
     }
-  }
+  };
 
   const handleGoShopDetails = (shopId: string) => {
     history.push(`/shop/${shopId}`);
-  }
+  };
 
   const handleGoFlowerDetails = (flowerId: string) => {
     history.push(`/flower/${flowerId}`);
-  }
+  };
 
   const renderShopImage = (item: any) => {
     let cardMedia = (
@@ -101,7 +101,7 @@ function DisplayResult(props: any) {
       />
     );
 
-    if (!_.isEqual(item.image, "null")) {
+    if (!_.isEqual(item.image, 'null')) {
       cardMedia = (
         <CardMedia
           className={classes.media}
@@ -113,7 +113,7 @@ function DisplayResult(props: any) {
     }
 
     return cardMedia;
-  }
+  };
 
   const renderFlowerImage = (item: any) => {
     let cardMedia = (
@@ -125,7 +125,7 @@ function DisplayResult(props: any) {
       />
     );
 
-    if (!_.isEqual(item.image, "null")) {
+    if (!_.isEqual(item.image, 'null')) {
       cardMedia = (
         <CardMedia
           className={classes.media}
@@ -137,7 +137,7 @@ function DisplayResult(props: any) {
     }
 
     return cardMedia;
-  }
+  };
 
   const renderItem = () => {
     let results = null;
@@ -200,7 +200,7 @@ function DisplayResult(props: any) {
     }
 
     return results;
-  }
+  };
 
   return (
     <div className={classes.root}>
