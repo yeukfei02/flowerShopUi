@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import axios from 'axios';
+
+import CustomSnackBar from '../customSnackbar/CustomSnackbar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
@@ -19,13 +22,16 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.primary,
     },
     media: {
-      height: 200,
+      height: 230,
     },
   }),
 );
 
 function DisplayResult(props: any) {
   const classes = useStyles();
+
+  const [snackBarStatus, setSnackBarStatus] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
 
   const getShopById = async (id: number) => {
     let result = '';
@@ -42,6 +48,52 @@ function DisplayResult(props: any) {
     return result;
   }
 
+  const deleteShopById = async (id: string) => {
+    try {
+      const response = await axios.delete(`${ROOT_URL}/shop/${id}`);
+      if (response && response.status === 200) {
+        setSnackBarStatus('success');
+        setMessage(`delete shop by id: ${id}`);
+        setTimeout(() => {
+          props.fetchData();
+        }, 1000);
+      }
+    } catch (e) {
+      console.log("error = ", e.message);
+      setSnackBarStatus('error');
+      setMessage(`delete shop by id error, please delete flower first`);
+    }
+  }
+
+  const deleteFlowerById = async (id: string) => {
+    try {
+      const response = await axios.delete(`${ROOT_URL}/flower/${id}`);
+      if (response && response.status === 200) {
+        setSnackBarStatus('success');
+        setMessage(`delete flower by id: ${id}`);
+        setTimeout(() => {
+          props.fetchData();
+        }, 1000);
+      }
+    } catch (e) {
+      console.log("error = ", e.message);
+      setSnackBarStatus('error');
+      setMessage(`delete flower by id error`);
+    }
+  }
+
+  const handleShopDeleteById = (shopId: string) => {
+    if (shopId) {
+      deleteShopById(shopId);
+    }
+  }
+
+  const handleFlowerDeleteById = (flowerId: string) => {
+    if (flowerId) {
+      deleteFlowerById(flowerId);
+    }
+  }
+
   const renderItem = () => {
     let results = null;
 
@@ -51,17 +103,20 @@ function DisplayResult(props: any) {
           return (
             <Grid key={i} item xs={12} sm={4}>
               <Paper className={classes.paper}>
+                <div className="d-flex justify-content-end my-2" style={{ cursor: 'pointer' }}>
+                  <HighlightOffIcon fontSize="large" onClick={() => handleShopDeleteById(item.shopId)} />
+                </div>
                 <CardMedia
                   className={classes.media}
                   image={item.image}
                 />
-                <Typography className="mt-2" variant="h5" gutterBottom>
+                <Typography className="mt-2" variant="h6" gutterBottom>
                   Shop name: {item.shopName}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   Phone: {item.phone}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   Address: {item.address}
                 </Typography>
               </Paper>
@@ -73,26 +128,29 @@ function DisplayResult(props: any) {
           return (
             <Grid key={i} item xs={12} sm={4}>
               <Paper className={classes.paper}>
+                <div className="d-flex justify-content-end my-2" style={{ cursor: 'pointer' }}>
+                  <HighlightOffIcon fontSize="large" onClick={() => handleFlowerDeleteById(item.flowerId)} />
+                </div>
                 <CardMedia
                   className={classes.media}
                   image={item.image}
                 />
-                <Typography className="mt-2" variant="h5" gutterBottom>
+                <Typography className="mt-2" variant="h6" gutterBottom>
                   Flower name: {item.flowerName}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   Color: {item.color}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   Flower type: {item.flowerType}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   Price: {item.price}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
-                  occasion: {item.occasion}
+                <Typography variant="h6" gutterBottom>
+                  Occasion: {item.occasion}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   Shop: {item.shopId}
                 </Typography>
               </Paper>
@@ -110,6 +168,7 @@ function DisplayResult(props: any) {
       <Grid container spacing={3}>
         {renderItem()}
       </Grid>
+      <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
     </div>
   );
 }
