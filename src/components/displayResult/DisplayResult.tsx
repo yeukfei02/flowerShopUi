@@ -139,6 +139,10 @@ function DisplayResult(props: any) {
     return cardMedia;
   };
 
+  const handleShopNameClick = (shopId: string) => {
+    history.push(`/shop/${shopId}`);
+  };
+
   const renderItem = () => {
     let results = null;
 
@@ -190,7 +194,13 @@ function DisplayResult(props: any) {
                   Occasion: {item.occasion}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  Shop: {item.shop ? item.shop.shopName : ''}
+                  Shop:{' '}
+                  <span
+                    style={{ color: 'red', textDecoration: 'underline', cursor: 'pointer' }}
+                    onClick={() => handleShopNameClick(item.shopId)}
+                  >
+                    {item.shop ? item.shop.shopName : ''}
+                  </span>
                 </Typography>
               </Paper>
             </Grid>
