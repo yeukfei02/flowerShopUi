@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import CustomSnackBar from '../customSnackbar/CustomSnackbar';
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function DisplayResult(props: any) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [snackBarStatus, setSnackBarStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -94,6 +96,14 @@ function DisplayResult(props: any) {
     }
   }
 
+  const handleGoShopDetails = (shopId: string) => {
+    history.push(`/shop/${shopId}`);
+  }
+
+  const handleGoFlowerDetails = (flowerId: string) => {
+    history.push(`/flower/${flowerId}`);
+  }
+
   const renderItem = () => {
     let results = null;
 
@@ -108,7 +118,9 @@ function DisplayResult(props: any) {
                 </div>
                 <CardMedia
                   className={classes.media}
+                  style={{ cursor: 'pointer' }}
                   image={item.image}
+                  onClick={() => handleGoShopDetails(item.shopId)}
                 />
                 <Typography className="mt-2" variant="h6" gutterBottom>
                   Shop name: {item.shopName}
@@ -133,7 +145,9 @@ function DisplayResult(props: any) {
                 </div>
                 <CardMedia
                   className={classes.media}
+                  style={{ cursor: 'pointer' }}
                   image={item.image}
+                  onClick={() => handleGoFlowerDetails(item.flowerId)}
                 />
                 <Typography className="mt-2" variant="h6" gutterBottom>
                   Flower name: {item.flowerName}

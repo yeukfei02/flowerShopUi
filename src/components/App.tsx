@@ -5,6 +5,8 @@ import { Switch, Route } from 'react-router-dom';
 
 import Search from './search/Search';
 import Create from './create/Create';
+import ShopDetails from './shopDetails/ShopDetails';
+import FlowerDetails from './flowerDetails/FlowerDetails';
 
 // use default theme
 // const theme = createMuiTheme();
@@ -42,6 +44,12 @@ function App() {
         </Route>
         <Route exact path="/create">
           <Create />
+        </Route>
+        <Route exact path="/shop/:id">
+          <ShopDetails />
+        </Route>
+        <Route exact path="/flower/:id">
+          <FlowerDetails />
         </Route>
       </Switch>
     </MuiThemeProvider>
