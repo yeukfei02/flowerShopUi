@@ -158,6 +158,7 @@ function CreateFlowerForm() {
               acceptedFiles={['image/*']}
               dropzoneText={"Drag and drop an image here or click"}
               filesLimit={1}
+              maxFileSize={500000}
               onChange={handleFilesUpload}
               alertSnackbarProps={{
                 anchorOrigin: {
