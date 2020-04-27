@@ -46,7 +46,7 @@ function Search() {
 
   useEffect(() => {
     fetchData(searchValue, page);
-  }, []);
+  }, [searchValue, page]);
 
   const fetchData = (searchValue: string, page: number) => {
     if (searchValue === 'shop') {

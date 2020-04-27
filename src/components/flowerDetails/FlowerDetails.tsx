@@ -99,6 +99,12 @@ function FlowerDetails(props: any) {
           setFlowerType(response.data.flower.flowerType);
           setPrice(response.data.flower.price);
           setOccasion(response.data.flower.occasion);
+
+          let shopObj = {
+            value: response.data.flower.shopId,
+            label: response.data.flower.shop.shopName
+          };
+          setShop(shopObj);
         }
       }
     }
