@@ -9,7 +9,7 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import Select from 'react-select';
 import axios from 'axios';
 
-import CustomSnackBar from '../customSnackbar/CustomSnackbar';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 

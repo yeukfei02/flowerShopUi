@@ -14,7 +14,7 @@ import _ from 'lodash';
 
 import notFoundImage from '../../images/not-found.png';
 import CustomAppBar from '../customAppBar/CustomAppBar';
-import CustomSnackBar from '../customSnackbar/CustomSnackbar';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 

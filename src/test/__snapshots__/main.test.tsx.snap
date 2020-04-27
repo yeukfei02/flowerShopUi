@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`main.test render test Create 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test CreateFlowerForm 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test CreateShopForm 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test CustomAppBar 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test CustomSnackBar 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test DisplayResult 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test FlowerDetails 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test Search 1`] = `ShallowWrapper {}`;
+
+exports[`main.test render test ShopDetails 1`] = `ShallowWrapper {}`;
