@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       width: 600,
-      margin: 20
+      margin: 20,
     },
   }),
 );
@@ -24,31 +24,27 @@ const useStyles = makeStyles((theme: Theme) =>
 function Create() {
   const classes = useStyles();
 
-  const [createValue, setCreateValue] = useState<string>('');
+  const [createValue, setCreateValue] = useState<string>('shop');
 
   const handleCreateShop = () => {
     setCreateValue('shop');
-  }
+  };
 
   const handleCreateFlower = () => {
     setCreateValue('flower');
-  }
+  };
 
   const renderCreateForm = () => {
     let createForm = null;
 
     if (createValue === 'shop') {
-      createForm = (
-        <CreateShopForm />
-      );
+      createForm = <CreateShopForm />;
     } else if (createValue === 'flower') {
-      createForm = (
-        <CreateFlowerForm />
-      );
+      createForm = <CreateFlowerForm />;
     }
 
     return createForm;
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -58,22 +54,12 @@ function Create() {
           <CardContent>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <Button
-                  className="w-100"
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  onClick={handleCreateShop}>
+                <Button className="w-100" variant="contained" size="large" color="primary" onClick={handleCreateShop}>
                   Create shop
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Button
-                  className="w-100"
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  onClick={handleCreateFlower}>
+                <Button className="w-100" variant="contained" size="large" color="primary" onClick={handleCreateFlower}>
                   Create flower
                 </Button>
               </Grid>
@@ -83,7 +69,7 @@ function Create() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 export default Create;

@@ -10,7 +10,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import notFoundImage from '../../images/not-found.png';
-import CustomSnackBar from '../customSnackbar/CustomSnackbar';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      margin: 20
+      margin: 20,
     },
     paper: {
       padding: theme.spacing(2),
@@ -37,21 +37,6 @@ function DisplayResult(props: any) {
   const [snackBarStatus, setSnackBarStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
-  const getShopById = async (id: number) => {
-    let result = '';
-
-    const response = await axios.get(`${ROOT_URL}/shop/${id}`);
-    if (response && response.status === 200) {
-      if (response.data) {
-        if (response.data.shop) {
-          result = response.data.shop.shopName;
-        }
-      }
-    }
-
-    return result;
-  }
-
   const deleteShopById = async (id: string) => {
     try {
       const response = await axios.delete(`${ROOT_URL}/shop/${id}`);
@@ -63,11 +48,11 @@ function DisplayResult(props: any) {
         }, 1000);
       }
     } catch (e) {
-      console.log("error = ", e.message);
+      console.log('error = ', e.message);
       setSnackBarStatus('error');
       setMessage(`delete shop by id error, please delete flower first`);
     }
-  }
+  };
 
   const deleteFlowerById = async (id: string) => {
     try {
@@ -80,31 +65,31 @@ function DisplayResult(props: any) {
         }, 1000);
       }
     } catch (e) {
-      console.log("error = ", e.message);
+      console.log('error = ', e.message);
       setSnackBarStatus('error');
       setMessage(`delete flower by id error`);
     }
-  }
+  };
 
   const handleShopDeleteById = (shopId: string) => {
     if (shopId) {
       deleteShopById(shopId);
     }
-  }
+  };
 
   const handleFlowerDeleteById = (flowerId: string) => {
     if (flowerId) {
       deleteFlowerById(flowerId);
     }
-  }
+  };
 
   const handleGoShopDetails = (shopId: string) => {
     history.push(`/shop/${shopId}`);
-  }
+  };
 
   const handleGoFlowerDetails = (flowerId: string) => {
     history.push(`/flower/${flowerId}`);
-  }
+  };
 
   const renderShopImage = (item: any) => {
     let cardMedia = (
@@ -116,7 +101,7 @@ function DisplayResult(props: any) {
       />
     );
 
-    if (!_.isEqual(item.image, "null")) {
+    if (!_.isEqual(item.image, 'null')) {
       cardMedia = (
         <CardMedia
           className={classes.media}
@@ -128,7 +113,7 @@ function DisplayResult(props: any) {
     }
 
     return cardMedia;
-  }
+  };
 
   const renderFlowerImage = (item: any) => {
     let cardMedia = (
@@ -140,7 +125,7 @@ function DisplayResult(props: any) {
       />
     );
 
-    if (!_.isEqual(item.image, "null")) {
+    if (!_.isEqual(item.image, 'null')) {
       cardMedia = (
         <CardMedia
           className={classes.media}
@@ -152,7 +137,7 @@ function DisplayResult(props: any) {
     }
 
     return cardMedia;
-  }
+  };
 
   const renderItem = () => {
     let results = null;
@@ -205,7 +190,7 @@ function DisplayResult(props: any) {
                   Occasion: {item.occasion}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  Shop: {item.shopId}
+                  Shop: {item.shop ? item.shop.shopName : ''}
                 </Typography>
               </Paper>
             </Grid>
@@ -215,7 +200,7 @@ function DisplayResult(props: any) {
     }
 
     return results;
-  }
+  };
 
   return (
     <div className={classes.root}>

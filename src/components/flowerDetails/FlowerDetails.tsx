@@ -15,7 +15,7 @@ import _ from 'lodash';
 
 import notFoundImage from '../../images/not-found.png';
 import CustomAppBar from '../customAppBar/CustomAppBar';
-import CustomSnackBar from '../customSnackbar/CustomSnackbar';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       width: 600,
-      margin: 20
+      margin: 20,
     },
     media: {
       height: 230,
@@ -37,10 +37,43 @@ const useStyles = makeStyles((theme: Theme) =>
 const selectStyles = {
   container: (base: any, state: any) => ({
     ...base,
-    opacity: state.isDisabled ? ".5" : "1",
-    backgroundColor: "transparent",
-    zIndex: "999"
-  })
+    opacity: state.isDisabled ? '.5' : '1',
+    backgroundColor: 'transparent',
+    zIndex: '999',
+  }),
+};
+
+const getShopList = async () => {
+  let result = null;
+
+  const response = await axios.get(`${ROOT_URL}/shop`);
+  if (response && response.status === 200) {
+    if (response.data) {
+      const shopList = response.data.shops.map((item: any, i: number) => {
+        const obj = {
+          value: item.shopId,
+          label: item.shopName,
+        };
+        return obj;
+      });
+      result = shopList;
+    }
+  }
+
+  return result;
+};
+
+const getFlowerById = async (id: number) => {
+  let result = null;
+
+  const response = await axios.get(`${ROOT_URL}/flower/${id}`);
+  if (response && response.status === 200) {
+    if (response.data && response.data.flower) {
+      result = response.data.flower;
+    }
+  }
+
+  return result;
 };
 
 function FlowerDetails(props: any) {
@@ -63,81 +96,50 @@ function FlowerDetails(props: any) {
   const id = props.match.params.id;
 
   useEffect(() => {
-    getShopList();
+    getShopList()
+      .then((result: any) => {
+        setShopList(result);
+      })
+      .catch((e: any) => {
+        console.log('error = ', e.message);
+      });
   }, []);
 
   useEffect(() => {
     if (id) {
       getFlowerById(id)
+        .then((result: any) => {
+          setImage(result.image);
+          setFlowerName(result.flowerName);
+          setColor(result.color);
+          setFlowerType(result.flowerType);
+          setPrice(result.price);
+          setOccasion(result.occasion);
+
+          const shopObj = {
+            value: result.shopId,
+            label: result.shopName,
+          };
+          setShop(shopObj);
+        })
+        .catch((e: any) => {
+          console.log('error = ', e.message);
+        });
     }
   }, [id]);
 
-  const getShopList = async () => {
-    const response = await axios.get(`${ROOT_URL}/shop`);
-    if (response && response.status === 200) {
-      if (response.data) {
-        const shopList = response.data.shops.map((item: any, i: number) => {
-          let obj = {
-            value: item.shopId,
-            label: item.shopName
-          };
-          return obj;
-        });
-        setShopList(shopList);
-      }
-    }
-  }
-
-  const getFlowerById = async (id: number) => {
-    const response = await axios.get(`${ROOT_URL}/flower/${id}`);
-    if (response && response.status === 200) {
-      if (response.data) {
-        if (response.data.flower) {
-          setImage(response.data.flower.image);
-          setFlowerName(response.data.flower.flowerName);
-          setColor(response.data.flower.color);
-          setFlowerType(response.data.flower.flowerType);
-          setPrice(response.data.flower.price);
-          setOccasion(response.data.flower.occasion);
-        }
-      }
-    }
-  }
-
   const renderFlowerImage = () => {
-    let cardMedia = (
-      <CardMedia
-        className={classes.media}
-        style={{ cursor: 'pointer' }}
-        image={notFoundImage}
-      />
-    );
+    let cardMedia = <CardMedia className={classes.media} style={{ cursor: 'pointer' }} image={notFoundImage} />;
 
-    if (!_.isEqual(image, "null")) {
-      cardMedia = (
-        <CardMedia
-          className={classes.media}
-          style={{ cursor: 'pointer' }}
-          image={image}
-        />
-      );
+    if (!_.isEqual(image, 'null')) {
+      cardMedia = <CardMedia className={classes.media} style={{ cursor: 'pointer' }} image={image} />;
     }
 
     return cardMedia;
-  }
-
-  const handleFilesUpload = (files: any[]) => {
-    if (files && files.length === 1) {
-      getBase64(files[0], (imageBase64String: string) => {
-        if (imageBase64String) {
-          setImage(imageBase64String);
-        }
-      })
-    }
-  }
+  };
 
   const getBase64 = (file: any, cb: any) => {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       cb(reader.result);
@@ -145,45 +147,56 @@ function FlowerDetails(props: any) {
     reader.onerror = (error) => {
       console.log('error = ', error);
     };
-  }
+  };
 
+  const handleFilesUpload = (files: any[]) => {
+    if (files && files.length === 1) {
+      getBase64(files[0], (imageBase64String: string) => {
+        if (imageBase64String) {
+          setImage(imageBase64String);
+        }
+      });
+    }
+  };
 
   const handleFlowerNameChange = (e: any) => {
     setFlowerName(e.target.value);
-  }
+  };
 
   const handleColorChange = (e: any) => {
     setColor(e.target.value);
-  }
+  };
 
   const handleFlowerTypeChange = (e: any) => {
     setFlowerType(e.target.value);
-  }
+  };
 
   const handlePriceChange = (e: any) => {
     setPrice(parseFloat(e.target.value));
-  }
+  };
 
   const handleOccasionChange = (e: any) => {
     setOccasion(e.target.value);
-  }
+  };
 
   const handleShopChange = (selectedShop: any) => {
     if (selectedShop) {
       setShop(selectedShop);
     }
-  }
+  };
 
-  const handleUpdateFlower = () => {
-    if (image && flowerName && color && flowerType && price && occasion && shop) {
-      updateFlower(id, image, flowerName, color, flowerType, price, occasion, shop);
-      setSnackBarStatus('');
-      setMessage('');
-    }
-  }
-
-  const updateFlower = async (id: string, image: string, flowerName: string, color: string, flowerType: string, price: number, occasion: string, shop: any) => {
-    const response = await axios.patch(`${ROOT_URL}/flower/${id}`,
+  const updateFlower = async (
+    id: string,
+    image: string,
+    flowerName: string,
+    color: string,
+    flowerType: string,
+    price: number,
+    occasion: string,
+    shop: any,
+  ) => {
+    const response = await axios.patch(
+      `${ROOT_URL}/flower/${id}`,
       {
         image: image,
         flowerName: flowerName,
@@ -191,13 +204,13 @@ function FlowerDetails(props: any) {
         flowerType: flowerType,
         price: price,
         occasion: occasion,
-        shopId: shop.value
+        shopId: shop.value,
       },
       {
         headers: {
-          'Content-type': 'application/json'
-        }
-      }
+          'Content-type': 'application/json',
+        },
+      },
     );
     if (response && response.status === 200) {
       setSnackBarStatus('success');
@@ -206,11 +219,19 @@ function FlowerDetails(props: any) {
       setSnackBarStatus('error');
       setMessage('update flower error');
     }
-  }
+  };
+
+  const handleUpdateFlower = () => {
+    if (image && flowerName && color && flowerType && price && occasion && shop) {
+      updateFlower(id, image, flowerName, color, flowerType, price, occasion, shop);
+      setSnackBarStatus('');
+      setMessage('');
+    }
+  };
 
   const handleBack = () => {
     history.push(`/`);
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -225,23 +246,54 @@ function FlowerDetails(props: any) {
             <div className="mt-3 mb-2">
               <DropzoneArea
                 acceptedFiles={['image/*']}
-                dropzoneText={"Drag and drop an image here or click"}
+                dropzoneText={'Drag and drop an image here or click'}
                 filesLimit={1}
                 maxFileSize={500000}
                 onChange={handleFilesUpload}
                 alertSnackbarProps={{
                   anchorOrigin: {
                     horizontal: 'center',
-                    vertical: 'bottom'
-                  }
+                    vertical: 'bottom',
+                  },
                 }}
               />
             </div>
-            <TextField className="w-100 my-2" value={flowerName} label="Flower name" variant="outlined" onChange={(e) => handleFlowerNameChange(e)} />
-            <TextField className="w-100 my-2" value={color} label="Color" variant="outlined" onChange={(e) => handleColorChange(e)} />
-            <TextField className="w-100 my-2" value={flowerType} label="Flower type" variant="outlined" onChange={(e) => handleFlowerTypeChange(e)} />
-            <TextField className="w-100 my-2" value={price} type="number" label="Price" variant="outlined" onChange={(e) => handlePriceChange(e)} />
-            <TextField className="w-100 my-2" value={occasion} label="Occasion" variant="outlined" onChange={(e) => handleOccasionChange(e)} />
+            <TextField
+              className="w-100 my-2"
+              value={flowerName}
+              label="Flower name"
+              variant="outlined"
+              onChange={(e) => handleFlowerNameChange(e)}
+            />
+            <TextField
+              className="w-100 my-2"
+              value={color}
+              label="Color"
+              variant="outlined"
+              onChange={(e) => handleColorChange(e)}
+            />
+            <TextField
+              className="w-100 my-2"
+              value={flowerType}
+              label="Flower type"
+              variant="outlined"
+              onChange={(e) => handleFlowerTypeChange(e)}
+            />
+            <TextField
+              className="w-100 my-2"
+              value={price}
+              type="number"
+              label="Price"
+              variant="outlined"
+              onChange={(e) => handlePriceChange(e)}
+            />
+            <TextField
+              className="w-100 my-2"
+              value={occasion}
+              label="Occasion"
+              variant="outlined"
+              onChange={(e) => handleOccasionChange(e)}
+            />
             <Select
               className="w-100 my-2"
               styles={selectStyles}
@@ -251,14 +303,24 @@ function FlowerDetails(props: any) {
               options={shopList}
               isClearable={true}
             />
-            <Button className="w-100 my-2" variant="contained" size="large" color="primary" onClick={handleUpdateFlower}>Update flower</Button>
-            <Button className="w-100 my-2" variant="contained" size="large" color="secondary" onClick={handleBack}>Back</Button>
+            <Button
+              className="w-100 my-2"
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={handleUpdateFlower}
+            >
+              Update flower
+            </Button>
+            <Button className="w-100 my-2" variant="contained" size="large" color="secondary" onClick={handleBack}>
+              Back
+            </Button>
           </CardContent>
           <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 export default withRouter(FlowerDetails);

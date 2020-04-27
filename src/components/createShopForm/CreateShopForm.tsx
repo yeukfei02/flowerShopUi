@@ -8,14 +8,14 @@ import Typography from '@material-ui/core/Typography';
 import { DropzoneArea } from 'material-ui-dropzone';
 import axios from 'axios';
 
-import CustomSnackBar from '../customSnackbar/CustomSnackbar';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
 const useStyles = makeStyles({
   root: {
     width: 600,
-    margin: 20
+    margin: 20,
   },
 });
 
@@ -30,18 +30,8 @@ function CreateShopForm() {
   const [snackBarStatus, setSnackBarStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
-  const handleFilesUpload = (files: any[]) => {
-    if (files && files.length === 1) {
-      getBase64(files[0], (imageBase64String: string) => {
-        if (imageBase64String) {
-          setImage(imageBase64String);
-        }
-      })
-    }
-  }
-
   const getBase64 = (file: any, cb: any) => {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       cb(reader.result);
@@ -49,19 +39,53 @@ function CreateShopForm() {
     reader.onerror = (error) => {
       console.log('error = ', error);
     };
-  }
+  };
+
+  const handleFilesUpload = (files: any[]) => {
+    if (files && files.length === 1) {
+      getBase64(files[0], (imageBase64String: string) => {
+        if (imageBase64String) {
+          setImage(imageBase64String);
+        }
+      });
+    }
+  };
 
   const handleShopNameChange = (e: any) => {
     setShopName(e.target.value);
-  }
+  };
 
   const handlePhoneChange = (e: any) => {
     setPhone(e.target.value);
-  }
+  };
 
   const handleAddressChange = (e: any) => {
     setAddress(e.target.value);
-  }
+  };
+
+  const createShop = async (image: string, shopName: string, phone: string, address: string) => {
+    const response = await axios.post(
+      `${ROOT_URL}/shop/create-shop`,
+      {
+        image: image,
+        shopName: shopName,
+        phone: phone,
+        address: address,
+      },
+      {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      },
+    );
+    if (response && response.status === 201) {
+      setSnackBarStatus('success');
+      setMessage('create shop success');
+    } else {
+      setSnackBarStatus('error');
+      setMessage('create shop error');
+    }
+  };
 
   const handleCreateShop = () => {
     if (image && shopName && phone && address) {
@@ -72,30 +96,7 @@ function CreateShopForm() {
       setSnackBarStatus('error');
       setMessage('please enter all fields');
     }
-  }
-
-  const createShop = async (image: string, shopName: string, phone: string, address: string) => {
-    const response = await axios.post(`${ROOT_URL}/shop/create-shop`,
-      {
-        image: image,
-        shopName: shopName,
-        phone: phone,
-        address: address,
-      },
-      {
-        headers: {
-          'Content-type': 'application/json'
-        }
-      }
-    );
-    if (response && response.status === 201) {
-      setSnackBarStatus('success');
-      setMessage('create shop success');
-    } else {
-      setSnackBarStatus('error');
-      setMessage('create shop error');
-    }
-  }
+  };
 
   return (
     <div className="d-flex justify-content-center">
@@ -107,22 +108,34 @@ function CreateShopForm() {
           <div className="mt-3 mb-2">
             <DropzoneArea
               acceptedFiles={['image/*']}
-              dropzoneText={"Drag and drop an image here or click"}
+              dropzoneText={'Drag and drop an image here or click'}
               filesLimit={1}
               maxFileSize={500000}
               onChange={handleFilesUpload}
               alertSnackbarProps={{
                 anchorOrigin: {
                   horizontal: 'center',
-                  vertical: 'bottom'
-                }
+                  vertical: 'bottom',
+                },
               }}
             />
           </div>
-          <TextField className="w-100 my-2" label="Shop name" variant="outlined" onChange={(e) => handleShopNameChange(e)} />
+          <TextField
+            className="w-100 my-2"
+            label="Shop name"
+            variant="outlined"
+            onChange={(e) => handleShopNameChange(e)}
+          />
           <TextField className="w-100 my-2" label="Phone" variant="outlined" onChange={(e) => handlePhoneChange(e)} />
-          <TextField className="w-100 my-2" label="Address" variant="outlined" onChange={(e) => handleAddressChange(e)} />
-          <Button className="w-100 my-2" variant="contained" size="large" color="primary" onClick={handleCreateShop}>Create shop</Button>
+          <TextField
+            className="w-100 my-2"
+            label="Address"
+            variant="outlined"
+            onChange={(e) => handleAddressChange(e)}
+          />
+          <Button className="w-100 my-2" variant="contained" size="large" color="primary" onClick={handleCreateShop}>
+            Create shop
+          </Button>
         </CardContent>
         <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
       </Card>
