@@ -37,20 +37,20 @@ function DisplayResult(props: any) {
   const [snackBarStatus, setSnackBarStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
-  const getShopById = async (id: number) => {
-    let result = '';
-
-    const response = await axios.get(`${ROOT_URL}/shop/${id}`);
-    if (response && response.status === 200) {
-      if (response.data) {
-        if (response.data.shop) {
-          result = response.data.shop.shopName;
-        }
-      }
-    }
-
-    return result;
-  }
+  // const getShopById = async (id: number) => {
+  //   let result = '';
+  //
+  //   const response = await axios.get(`${ROOT_URL}/shop/${id}`);
+  //   if (response && response.status === 200) {
+  //     if (response.data) {
+  //       if (response.data.shop) {
+  //         result = response.data.shop.shopName;
+  //       }
+  //     }
+  //   }
+  //
+  //   return result;
+  // }
 
   const deleteShopById = async (id: string) => {
     try {

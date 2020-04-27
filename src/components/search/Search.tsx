@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function Search() {
   const classes = useStyles();
 
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('shop');
 
   const [shopName, setShopName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -46,7 +46,7 @@ function Search() {
 
   useEffect(() => {
     fetchData(searchValue, page);
-  }, [searchValue, page]);
+  }, []);
 
   const fetchData = (searchValue: string, page: number) => {
     if (searchValue === 'shop') {
@@ -190,26 +190,10 @@ function Search() {
 
   const handleSearchShop = () => {
     setSearchValue('shop');
-
-    clearInputData();
   }
 
   const handleSearchFlower = () => {
     setSearchValue('flower');
-
-    clearInputData();
-  }
-
-  const clearInputData = () => {
-    setShopName('');
-    setPhone('');
-    setAddress('');
-
-    setFlowerName('');
-    setColor('');
-    setFlowerType('');
-    setPrice(0);
-    setOccasion('');
   }
 
   const handleShopNameChange = (e: any) => {

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function Create() {
   const classes = useStyles();
 
-  const [createValue, setCreateValue] = useState<string>('');
+  const [createValue, setCreateValue] = useState<string>('shop');
 
   const handleCreateShop = () => {
     setCreateValue('shop');
