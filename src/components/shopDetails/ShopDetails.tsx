@@ -9,9 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import { DropzoneArea } from 'material-ui-dropzone';
 import { withRouter } from 'react-router';
 import { useHistory } from 'react-router-dom';
-
 import axios from 'axios';
+import _ from 'lodash';
 
+import notFoundImage from '../../images/not-found.png';
 import CustomAppBar from '../customAppBar/CustomAppBar';
 import CustomSnackBar from '../customSnackbar/CustomSnackbar';
 
@@ -64,6 +65,27 @@ function ShopDetails(props: any) {
         }
       }
     }
+  }
+
+  const renderShopImage = () => {
+    let cardMedia = (
+      <CardMedia
+        className={classes.media}
+        style={{ cursor: 'pointer' }}
+        image={notFoundImage}
+      />
+    );
+
+    if (!_.isEqual(image, "null")) {
+      cardMedia = (
+        <CardMedia
+          className={classes.media}
+          image={image}
+        />
+      );
+    }
+
+    return cardMedia;
   }
 
   const handleFilesUpload = (files: any[]) => {
@@ -127,10 +149,10 @@ function ShopDetails(props: any) {
     );
     if (response && response.status === 200) {
       setSnackBarStatus('success');
-      setMessage('create shop success');
+      setMessage('update shop success');
     } else {
       setSnackBarStatus('error');
-      setMessage('create shop error');
+      setMessage('update shop error');
     }
   }
 
@@ -143,10 +165,7 @@ function ShopDetails(props: any) {
             <Typography variant="h5" gutterBottom>
               Shop details
             </Typography>
-            <CardMedia
-              className={classes.media}
-              image={image}
-            />
+            {renderShopImage()}
             <div className="mt-3 mb-2">
               <DropzoneArea
                 acceptedFiles={['image/*']}

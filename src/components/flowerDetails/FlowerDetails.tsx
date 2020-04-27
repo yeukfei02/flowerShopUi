@@ -10,9 +10,10 @@ import Select from 'react-select';
 import { DropzoneArea } from 'material-ui-dropzone';
 import { withRouter } from 'react-router';
 import { useHistory } from 'react-router-dom';
-
 import axios from 'axios';
+import _ from 'lodash';
 
+import notFoundImage from '../../images/not-found.png';
 import CustomAppBar from '../customAppBar/CustomAppBar';
 import CustomSnackBar from '../customSnackbar/CustomSnackbar';
 
@@ -103,6 +104,28 @@ function FlowerDetails(props: any) {
     }
   }
 
+  const renderFlowerImage = () => {
+    let cardMedia = (
+      <CardMedia
+        className={classes.media}
+        style={{ cursor: 'pointer' }}
+        image={notFoundImage}
+      />
+    );
+
+    if (!_.isEqual(image, "null")) {
+      cardMedia = (
+        <CardMedia
+          className={classes.media}
+          style={{ cursor: 'pointer' }}
+          image={image}
+        />
+      );
+    }
+
+    return cardMedia;
+  }
+
   const handleFilesUpload = (files: any[]) => {
     if (files && files.length === 1) {
       getBase64(files[0], (imageBase64String: string) => {
@@ -178,10 +201,10 @@ function FlowerDetails(props: any) {
     );
     if (response && response.status === 200) {
       setSnackBarStatus('success');
-      setMessage('create flower success');
+      setMessage('update flower success');
     } else {
       setSnackBarStatus('error');
-      setMessage('create flower error');
+      setMessage('update flower error');
     }
   }
 
@@ -198,10 +221,7 @@ function FlowerDetails(props: any) {
             <Typography variant="h5" gutterBottom>
               Flower details
             </Typography>
-            <CardMedia
-              className={classes.media}
-              image={image}
-            />
+            {renderFlowerImage()}
             <div className="mt-3 mb-2">
               <DropzoneArea
                 acceptedFiles={['image/*']}
