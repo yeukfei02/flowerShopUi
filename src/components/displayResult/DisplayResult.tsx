@@ -33,7 +33,11 @@ function DisplayResult(props: any) {
           return (
             <Grid key={i} item xs={12} sm={4}>
               <Paper className={classes.paper}>
-                <Typography variant="h5" gutterBottom>
+                <CardMedia
+                  className={classes.media}
+                  image={item.image}
+                />
+                <Typography className="mt-2" variant="h5" gutterBottom>
                   Shop name: {item.shopName}
                 </Typography>
                 <Typography variant="h5" gutterBottom>
@@ -55,7 +59,7 @@ function DisplayResult(props: any) {
                   className={classes.media}
                   image={item.image}
                 />
-                <Typography variant="h5" gutterBottom>
+                <Typography className="mt-2" variant="h5" gutterBottom>
                   Flower name: {item.flowerName}
                 </Typography>
                 <Typography variant="h5" gutterBottom>

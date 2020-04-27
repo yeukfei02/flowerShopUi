@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { DropzoneArea } from 'material-ui-dropzone';
 import axios from 'axios';
 
 import CustomSnackBar from '../customSnackbar/CustomSnackbar';
@@ -21,12 +22,34 @@ const useStyles = makeStyles({
 function CreateShopForm() {
   const classes = useStyles();
 
+  const [image, setImage] = useState<string>('');
   const [shopName, setShopName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [address, setAddress] = useState<string>('');
 
   const [snackBarStatus, setSnackBarStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
+
+  const handleFilesUpload = (files: any[]) => {
+    if (files && files.length === 1) {
+      getBase64(files[0], (imageBase64String: string) => {
+        if (imageBase64String) {
+          setImage(imageBase64String);
+        }
+      })
+    }
+  }
+
+  const getBase64 = (file: any, cb: any) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      cb(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log('error = ', error);
+    };
+  }
 
   const handleShopNameChange = (e: any) => {
     setShopName(e.target.value);
@@ -41,16 +64,17 @@ function CreateShopForm() {
   }
 
   const handleCreateShop = () => {
-    if (shopName && phone && address) {
-      createShop(shopName, phone, address);
+    if (image && shopName && phone && address) {
+      createShop(image, shopName, phone, address);
       setSnackBarStatus('');
       setMessage('');
     }
   }
 
-  const createShop = async (shopName: string, phone: string, address: string) => {
+  const createShop = async (image: string, shopName: string, phone: string, address: string) => {
     const response = await axios.post(`${ROOT_URL}/shop/create-shop`,
       {
+        image: image,
         shopName: shopName,
         phone: phone,
         address: address,
@@ -77,6 +101,21 @@ function CreateShopForm() {
           <Typography variant="h5" gutterBottom>
             Create shop
           </Typography>
+          <div className="mt-3 mb-2">
+            <DropzoneArea
+              acceptedFiles={['image/*']}
+              dropzoneText={"Drag and drop an image here or click"}
+              filesLimit={1}
+              maxFileSize={500000}
+              onChange={handleFilesUpload}
+              alertSnackbarProps={{
+                anchorOrigin: {
+                  horizontal: 'center',
+                  vertical: 'bottom'
+                }
+              }}
+            />
+          </div>
           <TextField className="w-100 my-2" label="Shop name" variant="outlined" onChange={(e) => handleShopNameChange(e)} />
           <TextField className="w-100 my-2" label="Phone" variant="outlined" onChange={(e) => handlePhoneChange(e)} />
           <TextField className="w-100 my-2" label="Address" variant="outlined" onChange={(e) => handleAddressChange(e)} />

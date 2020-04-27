@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { DropzoneArea } from 'material-ui-dropzone';
 import Select from 'react-select';
 import axios from 'axios';
 
@@ -64,6 +65,27 @@ function CreateFlowerForm() {
     }
   }
 
+  const handleFilesUpload = (files: any[]) => {
+    if (files && files.length === 1) {
+      getBase64(files[0], (imageBase64String: string) => {
+        if (imageBase64String) {
+          setImage(imageBase64String);
+        }
+      })
+    }
+  }
+
+  const getBase64 = (file: any, cb: any) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      cb(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log('error = ', error);
+    };
+  }
+
   const handleFlowerNameChange = (e: any) => {
     setFlowerName(e.target.value);
   }
@@ -91,17 +113,17 @@ function CreateFlowerForm() {
   }
 
   const handleCreateFlower = () => {
-    if (flowerName && color && flowerType && price && occasion && shop) {
-      createFlower(flowerName, color, flowerType, price, occasion, shop);
+    if (image && flowerName && color && flowerType && price && occasion && shop) {
+      createFlower(image, flowerName, color, flowerType, price, occasion, shop);
       setSnackBarStatus('');
       setMessage('');
     }
   }
 
-  const createFlower = async (flowerName: string, color: string, flowerType: string, price: number, occasion: string, shop: any) => {
+  const createFlower = async (image: string, flowerName: string, color: string, flowerType: string, price: number, occasion: string, shop: any) => {
     const response = await axios.post(`${ROOT_URL}/flower/create-flower`,
       {
-        image: '',
+        image: image,
         flowerName: flowerName,
         color: color,
         flowerType: flowerType,
@@ -131,6 +153,21 @@ function CreateFlowerForm() {
           <Typography variant="h5" gutterBottom>
             Create flower
           </Typography>
+          <div className="mt-3 mb-2">
+            <DropzoneArea
+              acceptedFiles={['image/*']}
+              dropzoneText={"Drag and drop an image here or click"}
+              filesLimit={1}
+              maxFileSize={500000}
+              onChange={handleFilesUpload}
+              alertSnackbarProps={{
+                anchorOrigin: {
+                  horizontal: 'center',
+                  vertical: 'bottom'
+                }
+              }}
+            />
+          </div>
           <TextField className="w-100 my-2" label="Flower name" variant="outlined" onChange={(e) => handleFlowerNameChange(e)} />
           <TextField className="w-100 my-2" label="Color" variant="outlined" onChange={(e) => handleColorChange(e)} />
           <TextField className="w-100 my-2" label="Flower type" variant="outlined" onChange={(e) => handleFlowerTypeChange(e)} />
