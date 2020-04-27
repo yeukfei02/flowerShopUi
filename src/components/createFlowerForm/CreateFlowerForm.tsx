@@ -229,7 +229,7 @@ function CreateFlowerForm() {
             Create flower
           </Button>
         </CardContent>
-        <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
+        <CustomSnackbar snackBarStatus={snackBarStatus} message={message} />
       </Card>
     </div>
   );

@@ -207,7 +207,7 @@ function ShopDetails(props: any) {
               Back
             </Button>
           </CardContent>
-          <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
+          <CustomSnackbar snackBarStatus={snackBarStatus} message={message} />
         </Card>
       </div>
     </div>

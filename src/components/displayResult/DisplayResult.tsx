@@ -207,7 +207,7 @@ function DisplayResult(props: any) {
       <Grid container spacing={3}>
         {renderItem()}
       </Grid>
-      <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
+      <CustomSnackbar snackBarStatus={snackBarStatus} message={message} />
     </div>
   );
 }

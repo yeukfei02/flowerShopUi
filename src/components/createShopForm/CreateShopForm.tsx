@@ -137,7 +137,7 @@ function CreateShopForm() {
             Create shop
           </Button>
         </CardContent>
-        <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
+        <CustomSnackbar snackBarStatus={snackBarStatus} message={message} />
       </Card>
     </div>
   );
