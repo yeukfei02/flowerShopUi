@@ -4,6 +4,9 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
+import axios from 'axios';
+
+const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,6 +26,21 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function DisplayResult(props: any) {
   const classes = useStyles();
+
+  const getShopById = async (id: number) => {
+    let result = '';
+
+    const response = await axios.get(`${ROOT_URL}/shop/${id}`);
+    if (response && response.status === 200) {
+      if (response.data) {
+        if (response.data.shop) {
+          result = response.data.shop.shopName;
+        }
+      }
+    }
+
+    return result;
+  }
 
   const renderItem = () => {
     let results = null;
