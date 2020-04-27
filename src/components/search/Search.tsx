@@ -45,6 +45,10 @@ function Search() {
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
+    fetchData(searchValue, page);
+  }, [searchValue, page]);
+
+  const fetchData = (searchValue: string, page: number) => {
     if (searchValue === 'shop') {
       getAllShop();
       getAllShopByFilter(page);
@@ -52,7 +56,7 @@ function Search() {
       getAllFlower();
       getAllFlowerByFilter(page);
     }
-  }, [searchValue, page]);
+  }
 
   const getAllShop = async () => {
     const response = await axios.get(`${ROOT_URL}/shop`);
@@ -298,7 +302,7 @@ function Search() {
     if (searchValue && pageResultList) {
       displayResult = (
         <div>
-          <DisplayResult searchValue={searchValue} resultList={pageResultList} />
+          <DisplayResult searchValue={searchValue} resultList={pageResultList} fetchData={() => fetchData(searchValue, page)} />
           <div className={`${classes.root} d-flex justify-content-center mt-3 mb-5`}>
             <Pagination count={Math.round(resultList.length / 10)} page={page} color="secondary" showFirstButton showLastButton onChange={handlePageChange} />
           </div>
