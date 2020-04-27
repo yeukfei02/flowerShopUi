@@ -68,6 +68,9 @@ function CreateShopForm() {
       createShop(image, shopName, phone, address);
       setSnackBarStatus('');
       setMessage('');
+    } else {
+      setSnackBarStatus('error');
+      setMessage('please enter all fields');
     }
   }
 

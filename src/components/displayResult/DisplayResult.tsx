@@ -5,8 +5,11 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import _ from 'lodash';
 
+import notFoundImage from '../../images/not-found.png';
 import CustomSnackBar from '../customSnackbar/CustomSnackbar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
@@ -29,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function DisplayResult(props: any) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [snackBarStatus, setSnackBarStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -94,6 +98,62 @@ function DisplayResult(props: any) {
     }
   }
 
+  const handleGoShopDetails = (shopId: string) => {
+    history.push(`/shop/${shopId}`);
+  }
+
+  const handleGoFlowerDetails = (flowerId: string) => {
+    history.push(`/flower/${flowerId}`);
+  }
+
+  const renderShopImage = (item: any) => {
+    let cardMedia = (
+      <CardMedia
+        className={classes.media}
+        style={{ cursor: 'pointer' }}
+        image={notFoundImage}
+        onClick={() => handleGoShopDetails(item.shopId)}
+      />
+    );
+
+    if (!_.isEqual(item.image, "null")) {
+      cardMedia = (
+        <CardMedia
+          className={classes.media}
+          style={{ cursor: 'pointer' }}
+          image={item.image}
+          onClick={() => handleGoShopDetails(item.shopId)}
+        />
+      );
+    }
+
+    return cardMedia;
+  }
+
+  const renderFlowerImage = (item: any) => {
+    let cardMedia = (
+      <CardMedia
+        className={classes.media}
+        style={{ cursor: 'pointer' }}
+        image={notFoundImage}
+        onClick={() => handleGoFlowerDetails(item.flowerId)}
+      />
+    );
+
+    if (!_.isEqual(item.image, "null")) {
+      cardMedia = (
+        <CardMedia
+          className={classes.media}
+          style={{ cursor: 'pointer' }}
+          image={item.image}
+          onClick={() => handleGoFlowerDetails(item.flowerId)}
+        />
+      );
+    }
+
+    return cardMedia;
+  }
+
   const renderItem = () => {
     let results = null;
 
@@ -106,10 +166,7 @@ function DisplayResult(props: any) {
                 <div className="d-flex justify-content-end my-2" style={{ cursor: 'pointer' }}>
                   <HighlightOffIcon fontSize="large" onClick={() => handleShopDeleteById(item.shopId)} />
                 </div>
-                <CardMedia
-                  className={classes.media}
-                  image={item.image}
-                />
+                {renderShopImage(item)}
                 <Typography className="mt-2" variant="h6" gutterBottom>
                   Shop name: {item.shopName}
                 </Typography>
@@ -131,10 +188,7 @@ function DisplayResult(props: any) {
                 <div className="d-flex justify-content-end my-2" style={{ cursor: 'pointer' }}>
                   <HighlightOffIcon fontSize="large" onClick={() => handleFlowerDeleteById(item.flowerId)} />
                 </div>
-                <CardMedia
-                  className={classes.media}
-                  image={item.image}
-                />
+                {renderFlowerImage(item)}
                 <Typography className="mt-2" variant="h6" gutterBottom>
                   Flower name: {item.flowerName}
                 </Typography>

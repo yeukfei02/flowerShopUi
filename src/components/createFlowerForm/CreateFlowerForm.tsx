@@ -117,6 +117,9 @@ function CreateFlowerForm() {
       createFlower(image, flowerName, color, flowerType, price, occasion, shop);
       setSnackBarStatus('');
       setMessage('');
+    } else {
+      setSnackBarStatus('error');
+      setMessage('please enter all fields');
     }
   }
 
