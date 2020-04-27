@@ -16,7 +16,7 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function CustomSnackBar(props: any) {
+function CustomSnackbar(props: any) {
   const classes = useStyles();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -64,4 +64,4 @@ function CustomSnackBar(props: any) {
   return <div className={classes.root}>{renderSnackBar()}</div>;
 }
 
-export default CustomSnackBar;
+export default CustomSnackbar;

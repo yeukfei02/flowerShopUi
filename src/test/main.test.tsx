@@ -9,7 +9,7 @@ import ShopDetails from '../components/shopDetails/ShopDetails';
 import FlowerDetails from '../components/flowerDetails/FlowerDetails';
 
 import CustomAppBar from '../components/customAppBar/CustomAppBar';
-import CustomSnackBar from '../components/customSnackBar/CustomSnackBar';
+import CustomSnackbar from '../components/customSnackbar/CustomSnackbar';
 import CreateShopForm from '../components/createShopForm/CreateShopForm';
 import CreateFlowerForm from '../components/createFlowerForm/CreateFlowerForm';
 import DisplayResult from '../components/displayResult/DisplayResult';
@@ -49,8 +49,8 @@ describe('main.test', () => {
       expect(wrapper).toMatchSnapshot();
     });
 
-    it('CustomSnackBar', () => {
-      const wrapper = shallow(<CustomSnackBar />);
+    it('CustomSnackbar', () => {
+      const wrapper = shallow(<CustomSnackbar />);
       expect(wrapper).toMatchSnapshot();
     });
 

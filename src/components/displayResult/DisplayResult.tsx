@@ -10,7 +10,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import notFoundImage from '../../images/not-found.png';
-import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
@@ -207,7 +207,7 @@ function DisplayResult(props: any) {
       <Grid container spacing={3}>
         {renderItem()}
       </Grid>
-      <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
+      <CustomSnackbar snackBarStatus={snackBarStatus} message={message} />
     </div>
   );
 }

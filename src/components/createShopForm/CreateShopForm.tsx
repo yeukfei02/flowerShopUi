@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { DropzoneArea } from 'material-ui-dropzone';
 import axios from 'axios';
 
-import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 
 const ROOT_URL = `https://flower-shop-api.herokuapp.com/api`;
 
@@ -137,7 +137,7 @@ function CreateShopForm() {
             Create shop
           </Button>
         </CardContent>
-        <CustomSnackBar snackBarStatus={snackBarStatus} message={message} />
+        <CustomSnackbar snackBarStatus={snackBarStatus} message={message} />
       </Card>
     </div>
   );
