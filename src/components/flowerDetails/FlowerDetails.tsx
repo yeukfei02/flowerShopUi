@@ -118,7 +118,7 @@ function FlowerDetails(props: any) {
 
           const shopObj = {
             value: result.shopId,
-            label: result.shopName,
+            label: result.shop.shopName,
           };
           setShop(shopObj);
         })
@@ -129,10 +129,10 @@ function FlowerDetails(props: any) {
   }, [id]);
 
   const renderFlowerImage = () => {
-    let cardMedia = <CardMedia className={classes.media} style={{ cursor: 'pointer' }} image={notFoundImage} />;
+    let cardMedia = <CardMedia className={classes.media} image={notFoundImage} />;
 
     if (!_.isEqual(image, 'null')) {
-      cardMedia = <CardMedia className={classes.media} style={{ cursor: 'pointer' }} image={image} />;
+      cardMedia = <CardMedia className={classes.media} image={image} />;
     }
 
     return cardMedia;

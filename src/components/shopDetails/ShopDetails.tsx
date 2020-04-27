@@ -76,7 +76,7 @@ function ShopDetails(props: any) {
   }, [id]);
 
   const renderShopImage = () => {
-    let cardMedia = <CardMedia className={classes.media} style={{ cursor: 'pointer' }} image={notFoundImage} />;
+    let cardMedia = <CardMedia className={classes.media} image={notFoundImage} />;
 
     if (!_.isEqual(image, 'null')) {
       cardMedia = <CardMedia className={classes.media} image={image} />;
