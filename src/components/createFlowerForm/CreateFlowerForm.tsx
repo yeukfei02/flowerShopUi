@@ -29,7 +29,7 @@ const selectStyles = {
   }),
 };
 
-const getShopList = async () => {
+const getShopList = async (): Promise<any> => {
   let result = null;
 
   const response = await axios.get(`${ROOT_URL}/shop`);
@@ -49,7 +49,7 @@ const getShopList = async () => {
   return result;
 };
 
-function CreateFlowerForm() {
+function CreateFlowerForm(): JSX.Element {
   const classes = useStyles();
 
   const [shopList, setShopList] = useState<any[]>([]);
@@ -66,16 +66,17 @@ function CreateFlowerForm() {
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
-    getShopList()
-      .then((result: any) => {
-        setShopList(result);
-      })
-      .catch((e: any) => {
-        console.log('error = ', e.message);
-      });
+    getShopListRequest();
   }, []);
 
-  const getBase64 = (file: any, cb: any) => {
+  const getShopListRequest = async (): Promise<void> => {
+    const result = await getShopList();
+    if (result) {
+      setShopList(result);
+    }
+  };
+
+  const getBase64 = (file: any, cb: any): void => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -86,7 +87,7 @@ function CreateFlowerForm() {
     };
   };
 
-  const handleFilesUpload = (files: any[]) => {
+  const handleFilesUpload = (files: any[]): void => {
     if (files && files.length === 1) {
       getBase64(files[0], (imageBase64String: string) => {
         if (imageBase64String) {
@@ -96,27 +97,27 @@ function CreateFlowerForm() {
     }
   };
 
-  const handleFlowerNameChange = (e: any) => {
+  const handleFlowerNameChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setFlowerName(e.target.value);
   };
 
-  const handleColorChange = (e: any) => {
+  const handleColorChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setColor(e.target.value);
   };
 
-  const handleFlowerTypeChange = (e: any) => {
+  const handleFlowerTypeChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setFlowerType(e.target.value);
   };
 
-  const handlePriceChange = (e: any) => {
+  const handlePriceChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setPrice(parseFloat(e.target.value));
   };
 
-  const handleOccasionChange = (e: any) => {
+  const handleOccasionChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setOccasion(e.target.value);
   };
 
-  const handleShopChange = (selectedShop: any) => {
+  const handleShopChange = (selectedShop: any): void => {
     if (selectedShop) {
       setShop(selectedShop);
     }
@@ -130,7 +131,7 @@ function CreateFlowerForm() {
     price: number,
     occasion: string,
     shop: any,
-  ) => {
+  ): Promise<void> => {
     const response = await axios.post(
       `${ROOT_URL}/flower/create-flower`,
       {
@@ -157,9 +158,9 @@ function CreateFlowerForm() {
     }
   };
 
-  const handleCreateFlower = () => {
+  const handleCreateFlower = async (): Promise<void> => {
     if (image && flowerName && color && flowerType && price && occasion && shop) {
-      createFlower(image, flowerName, color, flowerType, price, occasion, shop);
+      await createFlower(image, flowerName, color, flowerType, price, occasion, shop);
       setSnackBarStatus('');
       setMessage('');
     } else {

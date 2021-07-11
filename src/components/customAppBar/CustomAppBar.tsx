@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-function CustomAppBar() {
+function CustomAppBar(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
 

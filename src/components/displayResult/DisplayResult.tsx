@@ -30,14 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-function DisplayResult(props: any) {
+function DisplayResult(props: any): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
 
   const [snackBarStatus, setSnackBarStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
-  const deleteShopById = async (id: string) => {
+  const deleteShopById = async (id: string): Promise<void> => {
     try {
       const response = await axios.delete(`${ROOT_URL}/shop/${id}`);
       if (response && response.status === 200) {
@@ -54,7 +54,7 @@ function DisplayResult(props: any) {
     }
   };
 
-  const deleteFlowerById = async (id: string) => {
+  const deleteFlowerById = async (id: string): Promise<void> => {
     try {
       const response = await axios.delete(`${ROOT_URL}/flower/${id}`);
       if (response && response.status === 200) {
@@ -71,27 +71,27 @@ function DisplayResult(props: any) {
     }
   };
 
-  const handleShopDeleteById = (shopId: string) => {
+  const handleShopDeleteById = async (shopId: string): Promise<void> => {
     if (shopId) {
-      deleteShopById(shopId);
+      await deleteShopById(shopId);
     }
   };
 
-  const handleFlowerDeleteById = (flowerId: string) => {
+  const handleFlowerDeleteById = async (flowerId: string): Promise<void> => {
     if (flowerId) {
-      deleteFlowerById(flowerId);
+      await deleteFlowerById(flowerId);
     }
   };
 
-  const handleGoShopDetails = (shopId: string) => {
+  const handleGoShopDetails = (shopId: string): void => {
     history.push(`/shop/${shopId}`);
   };
 
-  const handleGoFlowerDetails = (flowerId: string) => {
+  const handleGoFlowerDetails = (flowerId: string): void => {
     history.push(`/flower/${flowerId}`);
   };
 
-  const renderShopImage = (item: any) => {
+  const renderShopImage = (item: any): JSX.Element => {
     let cardMedia = (
       <CardMedia
         className={classes.media}
@@ -115,7 +115,7 @@ function DisplayResult(props: any) {
     return cardMedia;
   };
 
-  const renderFlowerImage = (item: any) => {
+  const renderFlowerImage = (item: any): JSX.Element => {
     let cardMedia = (
       <CardMedia
         className={classes.media}
@@ -139,7 +139,7 @@ function DisplayResult(props: any) {
     return cardMedia;
   };
 
-  const handleShopNameClick = (shopId: string) => {
+  const handleShopNameClick = (shopId: string): void => {
     history.push(`/shop/${shopId}`);
   };
 

@@ -21,20 +21,20 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-function Create() {
+function Create(): JSX.Element {
   const classes = useStyles();
 
   const [createValue, setCreateValue] = useState<string>('shop');
 
-  const handleCreateShop = () => {
+  const handleCreateShop = (): void => {
     setCreateValue('shop');
   };
 
-  const handleCreateFlower = () => {
+  const handleCreateFlower = (): void => {
     setCreateValue('flower');
   };
 
-  const renderCreateForm = () => {
+  const renderCreateForm = (): JSX.Element | null => {
     let createForm = null;
 
     if (createValue === 'shop') {

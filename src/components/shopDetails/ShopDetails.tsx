@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const getShopById = async (id: number) => {
+const getShopById = async (id: number): Promise<any> => {
   let result = null;
 
   const response = await axios.get(`${ROOT_URL}/shop/${id}`);
@@ -46,7 +46,7 @@ const getShopById = async (id: number) => {
   return result;
 };
 
-function ShopDetails(props: any) {
+function ShopDetails(props: any): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
 
@@ -62,20 +62,21 @@ function ShopDetails(props: any) {
 
   useEffect(() => {
     if (id) {
-      getShopById(id)
-        .then((result: any) => {
-          setImage(result.image);
-          setShopName(result.shopName);
-          setPhone(result.phone);
-          setAddress(result.address);
-        })
-        .catch((e: any) => {
-          console.log('error = ', e.message);
-        });
+      getShopByIdRequest(id);
     }
   }, [id]);
 
-  const renderShopImage = () => {
+  const getShopByIdRequest = async (id: number): Promise<void> => {
+    const result = await getShopById(id);
+    if (result) {
+      setImage(result.image);
+      setShopName(result.shopName);
+      setPhone(result.phone);
+      setAddress(result.address);
+    }
+  };
+
+  const renderShopImage = (): JSX.Element => {
     let cardMedia = <CardMedia className={classes.media} image={notFoundImage} />;
 
     if (!_.isEqual(image, 'null')) {
@@ -85,7 +86,7 @@ function ShopDetails(props: any) {
     return cardMedia;
   };
 
-  const getBase64 = (file: any, cb: any) => {
+  const getBase64 = (file: any, cb: any): void => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -96,7 +97,7 @@ function ShopDetails(props: any) {
     };
   };
 
-  const handleFilesUpload = (files: any[]) => {
+  const handleFilesUpload = (files: any[]): void => {
     if (files && files.length === 1) {
       getBase64(files[0], (imageBase64String: string) => {
         if (imageBase64String) {
@@ -106,19 +107,25 @@ function ShopDetails(props: any) {
     }
   };
 
-  const handleShopNameChange = (e: any) => {
+  const handleShopNameChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setShopName(e.target.value);
   };
 
-  const handlePhoneChange = (e: any) => {
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setPhone(e.target.value);
   };
 
-  const handleAddressChange = (e: any) => {
+  const handleAddressChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setAddress(e.target.value);
   };
 
-  const updateShop = async (id: string, image: string, shopName: string, phone: string, address: string) => {
+  const updateShop = async (
+    id: string,
+    image: string,
+    shopName: string,
+    phone: string,
+    address: string,
+  ): Promise<void> => {
     const response = await axios.patch(
       `${ROOT_URL}/shop/${id}`,
       {
@@ -142,15 +149,15 @@ function ShopDetails(props: any) {
     }
   };
 
-  const handleUpdateShop = () => {
+  const handleUpdateShop = async (): Promise<void> => {
     if (image && shopName && phone && address) {
-      updateShop(id, image, shopName, phone, address);
+      await updateShop(id, image, shopName, phone, address);
       setSnackBarStatus('');
       setMessage('');
     }
   };
 
-  const handleBack = () => {
+  const handleBack = (): void => {
     history.push(`/`);
   };
 
