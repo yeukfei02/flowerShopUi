@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.2...v1.1.3) (2021-07-11)
+
+
+### Bug Fixes
+
+* 🐛 refactor old code and use async await ([0288166](https://github.com/yeukfei02/flowerShopUi/commit/0288166071aa29709ca27021bd4ceed4e27f44be))
+
 ### [1.1.2](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.1...v1.1.2) (2020-10-18)
 
 ### [1.1.1](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.0...v1.1.1) (2020-10-17)
