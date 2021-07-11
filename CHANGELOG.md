@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.3...v1.1.4) (2021-07-11)
+
+
+### Bug Fixes
+
+* 🐛 add devDependencies in package.json ([776bf5e](https://github.com/yeukfei02/flowerShopUi/commit/776bf5e4aa01d4512e23094ec76a3595d2ae892d))
+* 🐛 fix Procfile ([9293b9b](https://github.com/yeukfei02/flowerShopUi/commit/9293b9bd95a4ad06d8f53f601a870d34b2631d9c))
+
 ### [1.1.3](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.2...v1.1.3) (2021-07-11)
 
 
