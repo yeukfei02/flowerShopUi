@@ -12,11 +12,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function Alert(props: AlertProps) {
+function Alert(props: AlertProps): JSX.Element {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function CustomSnackbar(props: any) {
+function CustomSnackbar(props: any): JSX.Element {
   const classes = useStyles();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -33,11 +33,11 @@ function CustomSnackbar(props: any) {
     }
   }, [props.snackBarStatus, props.message]);
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setOpen(false);
   };
 
-  const renderSnackBar = () => {
+  const renderSnackBar = (): JSX.Element => {
     let snackBar = null;
 
     if (showSuccess) {

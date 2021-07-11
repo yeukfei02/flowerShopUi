@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const getAllShop = async () => {
+const getAllShop = async (): Promise<any> => {
   let result = null;
 
   const response = await axios.get(`${ROOT_URL}/shop`);
@@ -38,7 +38,7 @@ const getAllShop = async () => {
   return result;
 };
 
-const getAllShopByFilter = async (shopName: string, phone: string, address: string, page: number) => {
+const getAllShopByFilter = async (shopName: string, phone: string, address: string, page: number): Promise<any> => {
   let data = {};
   if (shopName) {
     const obj = {
@@ -79,7 +79,7 @@ const getAllShopByFilter = async (shopName: string, phone: string, address: stri
   return result;
 };
 
-const getAllFlower = async () => {
+const getAllFlower = async (): Promise<any> => {
   let result = null;
 
   const response = await axios.get(`${ROOT_URL}/flower`);
@@ -99,7 +99,7 @@ const getAllFlowerByFilter = async (
   price: number,
   occasion: string,
   page: number,
-) => {
+): Promise<any> => {
   let data = {};
   if (flowerName) {
     const obj = {
@@ -152,7 +152,7 @@ const getAllFlowerByFilter = async (
   return result;
 };
 
-function Search() {
+function Search(): JSX.Element {
   const classes = useStyles();
 
   const [searchValue, setSearchValue] = useState<string>('shop');
@@ -172,110 +172,114 @@ function Search() {
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    fetchData(searchValue, page);
+    if (searchValue && page) fetchData(searchValue, page);
   }, [searchValue, page]);
 
-  const fetchData = (searchValue: string, page: number) => {
+  const fetchData = async (searchValue: string, page: number): Promise<void> => {
     if (searchValue === 'shop') {
-      getAllShop()
-        .then((result: any) => {
-          setResultList(result);
-        })
-        .catch((e: any) => {
-          console.log('error = ', e.message);
-        });
+      await getAllShopRequest();
 
-      getAllShopByFilter(shopName, phone, address, page)
-        .then((result: any) => {
-          setPageResultList(result);
-        })
-        .catch((e: any) => {
-          console.log('error = ', e.message);
-        });
+      await getAllShopFilterRequest(shopName, phone, address, page);
     } else if (searchValue === 'flower') {
-      getAllFlower()
-        .then((result: any) => {
-          setResultList(result);
-        })
-        .catch((e: any) => {
-          console.log('error = ', e.message);
-        });
+      await getAllFlowerRequest();
 
-      getAllFlowerByFilter(flowerName, color, flowerType, price, occasion, page)
-        .then((result: any) => {
-          setPageResultList(result);
-        })
-        .catch((e: any) => {
-          console.log('error = ', e.message);
-        });
+      await getAllFlowerFilterRequest(flowerName, color, flowerType, price, occasion, page);
     }
   };
 
-  const handleSearchShop = () => {
+  const getAllShopRequest = async (): Promise<void> => {
+    const result = await getAllShop();
+    if (result) {
+      setResultList(result);
+    }
+  };
+
+  const getAllShopFilterRequest = async (
+    shopName: string,
+    phone: string,
+    address: string,
+    page: number,
+  ): Promise<void> => {
+    const result = await getAllShopByFilter(shopName, phone, address, page);
+    if (result) {
+      setPageResultList(result);
+    }
+  };
+
+  const getAllFlowerRequest = async (): Promise<void> => {
+    const result = await getAllFlower();
+    if (result) {
+      setResultList(result);
+    }
+  };
+
+  const getAllFlowerFilterRequest = async (
+    flowerName: string,
+    color: string,
+    flowerType: string,
+    price: number,
+    occasion: string,
+    page: number,
+  ): Promise<void> => {
+    const result = await getAllFlowerByFilter(flowerName, color, flowerType, price, occasion, page);
+    if (result) {
+      setPageResultList(result);
+    }
+  };
+
+  const handleSearchShop = (): void => {
     setSearchValue('shop');
   };
 
-  const handleSearchFlower = () => {
+  const handleSearchFlower = (): void => {
     setSearchValue('flower');
   };
 
-  const handleShopNameChange = (e: any) => {
+  const handleShopNameChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setShopName(e.target.value);
   };
 
-  const handlePhoneChange = (e: any) => {
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setPhone(e.target.value);
   };
 
-  const handleAddressChange = (e: any) => {
+  const handleAddressChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setAddress(e.target.value);
   };
 
-  const handleFilterShop = () => {
+  const handleFilterShop = async (): Promise<void> => {
     setPage(1);
 
-    getAllShopByFilter(shopName, phone, address, 1)
-      .then((result: any) => {
-        setPageResultList(result);
-      })
-      .catch((e: any) => {
-        console.log('error = ', e.message);
-      });
+    await getAllShopFilterRequest(shopName, phone, address, 1);
   };
 
-  const handleFlowerNameChange = (e: any) => {
+  const handleFlowerNameChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setFlowerName(e.target.value);
   };
 
-  const handleColorChange = (e: any) => {
+  const handleColorChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setColor(e.target.value);
   };
 
-  const handleFlowerTypeChange = (e: any) => {
+  const handleFlowerTypeChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setFlowerType(e.target.value);
   };
 
-  const handlePriceChange = (e: any) => {
+  const handlePriceChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setPrice(parseFloat(e.target.value));
   };
 
-  const handleOccasionChange = (e: any) => {
+  const handleOccasionChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setOccasion(e.target.value);
   };
 
-  const handleFilterFlower = () => {
+  const handleFilterFlower = async (): Promise<void> => {
     setPage(1);
 
-    getAllFlowerByFilter(flowerName, color, flowerType, price, occasion, 1)
-      .then((result: any) => {
-        setPageResultList(result);
-      })
-      .catch((e: any) => {
-        console.log('error = ', e.message);
-      });
+    await getAllFlowerFilterRequest(flowerName, color, flowerType, price, occasion, 1);
   };
 
-  const renderSearchDiv = () => {
+  const renderSearchDiv = (): JSX.Element | null => {
     let searchDiv = null;
 
     if (searchValue === 'shop') {
@@ -344,13 +348,13 @@ function Search() {
     return searchDiv;
   };
 
-  const handlePageChange = (event: object, page: number) => {
+  const handlePageChange = (event: object, page: number): void => {
     if (page) {
       setPage(page);
     }
   };
 
-  const renderDisplayResult = () => {
+  const renderDisplayResult = (): JSX.Element | null => {
     let displayResult = null;
 
     if (searchValue && pageResultList) {

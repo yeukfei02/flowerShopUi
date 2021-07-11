@@ -43,7 +43,7 @@ const selectStyles = {
   }),
 };
 
-const getShopList = async () => {
+const getShopList = async (): Promise<any> => {
   let result = null;
 
   const response = await axios.get(`${ROOT_URL}/shop`);
@@ -63,7 +63,7 @@ const getShopList = async () => {
   return result;
 };
 
-const getFlowerById = async (id: number) => {
+const getFlowerById = async (id: number): Promise<any> => {
   let result = null;
 
   const response = await axios.get(`${ROOT_URL}/flower/${id}`);
@@ -76,7 +76,7 @@ const getFlowerById = async (id: number) => {
   return result;
 };
 
-function FlowerDetails(props: any) {
+function FlowerDetails(props: any): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
 
@@ -96,39 +96,41 @@ function FlowerDetails(props: any) {
   const id = props.match.params.id;
 
   useEffect(() => {
-    getShopList()
-      .then((result: any) => {
-        setShopList(result);
-      })
-      .catch((e: any) => {
-        console.log('error = ', e.message);
-      });
+    getShopListRequest();
   }, []);
 
   useEffect(() => {
     if (id) {
-      getFlowerById(id)
-        .then((result: any) => {
-          setImage(result.image);
-          setFlowerName(result.flowerName);
-          setColor(result.color);
-          setFlowerType(result.flowerType);
-          setPrice(result.price);
-          setOccasion(result.occasion);
-
-          const shopObj = {
-            value: result.shopId,
-            label: result.shop.shopName,
-          };
-          setShop(shopObj);
-        })
-        .catch((e: any) => {
-          console.log('error = ', e.message);
-        });
+      getFlowerByIdRequest(id);
     }
   }, [id]);
 
-  const renderFlowerImage = () => {
+  const getShopListRequest = async (): Promise<void> => {
+    const result = await getShopList();
+    if (result) {
+      setShopList(result);
+    }
+  };
+
+  const getFlowerByIdRequest = async (id: number): Promise<void> => {
+    const result = await getFlowerById(id);
+    if (result) {
+      setImage(result.image);
+      setFlowerName(result.flowerName);
+      setColor(result.color);
+      setFlowerType(result.flowerType);
+      setPrice(result.price);
+      setOccasion(result.occasion);
+
+      const shopObj = {
+        value: result.shopId,
+        label: result.shop.shopName,
+      };
+      setShop(shopObj);
+    }
+  };
+
+  const renderFlowerImage = (): JSX.Element => {
     let cardMedia = <CardMedia className={classes.media} image={notFoundImage} />;
 
     if (!_.isEqual(image, 'null')) {
@@ -138,7 +140,7 @@ function FlowerDetails(props: any) {
     return cardMedia;
   };
 
-  const getBase64 = (file: any, cb: any) => {
+  const getBase64 = (file: any, cb: any): void => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -149,7 +151,7 @@ function FlowerDetails(props: any) {
     };
   };
 
-  const handleFilesUpload = (files: any[]) => {
+  const handleFilesUpload = (files: any[]): void => {
     if (files && files.length === 1) {
       getBase64(files[0], (imageBase64String: string) => {
         if (imageBase64String) {
@@ -159,27 +161,27 @@ function FlowerDetails(props: any) {
     }
   };
 
-  const handleFlowerNameChange = (e: any) => {
+  const handleFlowerNameChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setFlowerName(e.target.value);
   };
 
-  const handleColorChange = (e: any) => {
+  const handleColorChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setColor(e.target.value);
   };
 
-  const handleFlowerTypeChange = (e: any) => {
+  const handleFlowerTypeChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setFlowerType(e.target.value);
   };
 
-  const handlePriceChange = (e: any) => {
+  const handlePriceChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setPrice(parseFloat(e.target.value));
   };
 
-  const handleOccasionChange = (e: any) => {
+  const handleOccasionChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setOccasion(e.target.value);
   };
 
-  const handleShopChange = (selectedShop: any) => {
+  const handleShopChange = (selectedShop: any): void => {
     if (selectedShop) {
       setShop(selectedShop);
     }
@@ -194,7 +196,7 @@ function FlowerDetails(props: any) {
     price: number,
     occasion: string,
     shop: any,
-  ) => {
+  ): Promise<void> => {
     const response = await axios.patch(
       `${ROOT_URL}/flower/${id}`,
       {
@@ -221,15 +223,15 @@ function FlowerDetails(props: any) {
     }
   };
 
-  const handleUpdateFlower = () => {
+  const handleUpdateFlower = async (): Promise<void> => {
     if (image && flowerName && color && flowerType && price && occasion && shop) {
-      updateFlower(id, image, flowerName, color, flowerType, price, occasion, shop);
+      await updateFlower(id, image, flowerName, color, flowerType, price, occasion, shop);
       setSnackBarStatus('');
       setMessage('');
     }
   };
 
-  const handleBack = () => {
+  const handleBack = (): void => {
     history.push(`/`);
   };
 

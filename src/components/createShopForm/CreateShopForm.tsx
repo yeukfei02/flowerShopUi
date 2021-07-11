@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-function CreateShopForm() {
+function CreateShopForm(): JSX.Element {
   const classes = useStyles();
 
   const [image, setImage] = useState<string>('');
@@ -41,7 +41,7 @@ function CreateShopForm() {
     };
   };
 
-  const handleFilesUpload = (files: any[]) => {
+  const handleFilesUpload = (files: any[]): void => {
     if (files && files.length === 1) {
       getBase64(files[0], (imageBase64String: string) => {
         if (imageBase64String) {
@@ -51,19 +51,19 @@ function CreateShopForm() {
     }
   };
 
-  const handleShopNameChange = (e: any) => {
+  const handleShopNameChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setShopName(e.target.value);
   };
 
-  const handlePhoneChange = (e: any) => {
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setPhone(e.target.value);
   };
 
-  const handleAddressChange = (e: any) => {
+  const handleAddressChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setAddress(e.target.value);
   };
 
-  const createShop = async (image: string, shopName: string, phone: string, address: string) => {
+  const createShop = async (image: string, shopName: string, phone: string, address: string): Promise<void> => {
     const response = await axios.post(
       `${ROOT_URL}/shop/create-shop`,
       {
@@ -87,9 +87,9 @@ function CreateShopForm() {
     }
   };
 
-  const handleCreateShop = () => {
+  const handleCreateShop = async (): Promise<void> => {
     if (image && shopName && phone && address) {
-      createShop(image, shopName, phone, address);
+      await createShop(image, shopName, phone, address);
       setSnackBarStatus('');
       setMessage('');
     } else {

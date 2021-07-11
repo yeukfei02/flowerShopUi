@@ -29,7 +29,7 @@ const theme = createMuiTheme({
   },
 });
 
-function App() {
+function App(): JSX.Element {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
