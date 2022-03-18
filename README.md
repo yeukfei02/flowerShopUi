@@ -5,7 +5,7 @@
 
 Help you to record and find flower + shop
 
-url: <https://flower-shop-ui.herokuapp.com/>
+url: <https://flower-shop-ui.vercel.app/>
 
 ## Requirement
 
