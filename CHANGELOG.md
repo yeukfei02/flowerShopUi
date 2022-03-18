@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.4...v1.1.5) (2022-03-18)
+
+
+### Bug Fixes
+
+* 🐛 fix package.json and readme.md for vercel deploy ([3f7c6f4](https://github.com/yeukfei02/flowerShopUi/commit/3f7c6f4984b84604f78e71bb7f541c58e3acbb1b))
+* 🐛 update package.json and readme.md ([c127a1a](https://github.com/yeukfei02/flowerShopUi/commit/c127a1a4d822690a2bb58b99fe185a8c10c5fb46))
+
 ### [1.1.4](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.3...v1.1.4) (2021-07-11)
 
 
