@@ -1,6 +1,5 @@
 # flowerShopUi
 
-[![Build Status](https://travis-ci.com/yeukfei02/flowerShopUi.svg?branch=master)](https://travis-ci.com/yeukfei02/flowerShopUi)
 [![codecov](https://codecov.io/gh/yeukfei02/flowerShopUi/branch/master/graph/badge.svg)](https://codecov.io/gh/yeukfei02/flowerShopUi)
 
 Help you to record and find flower + shop
