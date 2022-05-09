@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.6](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.5...v1.1.6) (2022-05-09)
+
+
+### Bug Fixes
+
+* 🐛 remove not used travis ([494d7e2](https://github.com/yeukfei02/flowerShopUi/commit/494d7e2be6228622a9ffcea4eed950371cba2ca5))
+
 ### [1.1.5](https://github.com/yeukfei02/flowerShopUi/compare/v1.1.4...v1.1.5) (2022-03-18)
 
 
